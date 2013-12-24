@@ -1,0 +1,26 @@
+{
+    "name": "exeu/objectcomparer",
+    "type": "library",
+    "description": "Object Comparer for PHP Objects.",
+    "keywords": [],
+    "homepage": "https://github.com/Exeu/object-comparer",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "Jan Eichhorn",
+            "email": "exeu65@googlemail.com",
+            "role": "Maintainer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/Exeu/object-comparer/issues"
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.0",
+        "doctrine/common" : "dev-master"
+    },
+    "autoload": {
+        "psr-0": { "Exeu": "lib/" }
+    }
+}
