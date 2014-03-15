@@ -18,7 +18,9 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.3.0",
-        "doctrine/common" : "dev-master"
+        "doctrine/common" : "dev-master",
+        "jms/metadata": "dev-master",
+        "jms/serializer": "dev-master"
     },
     "autoload": {
         "psr-0": { "Exeu": "lib/" }

@@ -21,3 +21,9 @@ if (!$loader = @include __DIR__.'/../vendor/autoload.php') {
         'php composer.phar install'.PHP_EOL);
 }
 $loader->add('Exeu\ObjectComparer\Test', __DIR__);
+
+\Doctrine\Common\Annotations\AnnotationRegistry::registerAutoloadNamespace(
+    'Exeu\ObjectComparer\Annotation',
+    array(
+        __DIR__ . '/../lib/'
+));

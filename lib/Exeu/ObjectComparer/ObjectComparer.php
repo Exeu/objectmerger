@@ -17,6 +17,11 @@
 
 namespace Exeu\ObjectComparer;
 
+use Doctrine\Common\Annotations\AnnotationReader;
+use Exeu\ObjectComparer\Metadata\Driver\AnnotationDriver;
+use Exeu\ObjectComparer\Visitor\ObjectVisitor;
+use Metadata\MetadataFactory;
+
 /**
  * Class ObjectComparer
  *
@@ -26,5 +31,15 @@ namespace Exeu\ObjectComparer;
  */
 class ObjectComparer
 {
+    protected $objectVisitor;
 
+    public function __construct()
+    {
+        $this->objectVisitor = new ObjectVisitor();
+    }
+
+    public function compare($object1, $object2)
+    {
+        $this->objectVisitor->visit($object1, $object2, $metadata);
+    }
 }
