@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2013 Jan Eichhorn <exeu65@googlemail.com>
+ * Copyright 2014 Jan Eichhorn <exeu65@googlemail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,31 +15,31 @@
  * limitations under the License.
  */
 
-namespace Exeu\ObjectComparer;
+namespace Exeu\ObjectMerger;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use Exeu\ObjectComparer\Metadata\Driver\AnnotationDriver;
-use Exeu\ObjectComparer\Visitor\ObjectVisitor;
+use Exeu\ObjectMerger\Metadata\Driver\AnnotationDriver;
 use Metadata\MetadataFactory;
 
 /**
- * Class ObjectComparer
- *
- * @package Exeu\ObjectComparer
+ * Class ObjectMerger
  *
  * @author Jan Eichhorn <exeu65@googlemail.com>
  */
-class ObjectComparer
+class ObjectMerger
 {
-    protected $objectVisitor;
-
-    public function __construct()
+    public function merge($object1, $object2)
     {
-        $this->objectVisitor = new ObjectVisitor();
+        $visitor = $this->createMergingVisitor($object1);
+        $visitor->visit($object1, $object2);
     }
 
-    public function compare($object1, $object2)
+    protected function createMergingVisitor($rootObject)
     {
-        $this->objectVisitor->visit($object1, $object2, $metadata);
+        $reader = new AnnotationReader();
+        $metadataDriver = new AnnotationDriver($reader);
+        $metadataFactory = new MetadataFactory($metadataDriver);
+
+        return new MergingVisitor($metadataFactory, $rootObject);
     }
 }

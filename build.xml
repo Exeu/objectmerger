@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="ObjectComparer" default="build" basedir=".">
+<project name="ObjectMerger" default="build" basedir=".">
   <property name="build.dir" location="${basedir}/build" />
 
   <target name="clean">

@@ -15,15 +15,29 @@
  * limitations under the License.
  */
 
-if (!$loader = @include __DIR__.'/../vendor/autoload.php') {
-    die('You must set up the project dependencies, run the following commands:'.PHP_EOL.
-        'curl -s http://getcomposer.org/installer | php'.PHP_EOL.
-        'php composer.phar install'.PHP_EOL);
-}
-$loader->add('Exeu\ObjectMerger\Test', __DIR__);
+namespace Exeu\ObjectMerger\Metadata;
 
-\Doctrine\Common\Annotations\AnnotationRegistry::registerAutoloadNamespace(
-    'Exeu\ObjectMerger\Annotation',
-    array(
-        __DIR__ . '/../lib/'
-));
+use Metadata\ClassMetadata as BaseClassMetadata;
+
+class ClassMetadata extends BaseClassMetadata
+{
+    public $accessor = 'reflection';
+
+    public function serialize()
+    {
+        return serialize(array(
+            $this->useSetter,
+            parent::serialize()
+        ));
+    }
+
+    public function unserialize($str)
+    {
+        list(
+            $this->useSetter,
+            $parentStr
+            ) = unserialize($str);
+
+        parent::unserialize($parentStr);
+    }
+} 

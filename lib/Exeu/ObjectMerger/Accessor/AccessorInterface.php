@@ -15,15 +15,11 @@
  * limitations under the License.
  */
 
-if (!$loader = @include __DIR__.'/../vendor/autoload.php') {
-    die('You must set up the project dependencies, run the following commands:'.PHP_EOL.
-        'curl -s http://getcomposer.org/installer | php'.PHP_EOL.
-        'php composer.phar install'.PHP_EOL);
-}
-$loader->add('Exeu\ObjectMerger\Test', __DIR__);
+namespace Exeu\ObjectMerger\Accessor;
 
-\Doctrine\Common\Annotations\AnnotationRegistry::registerAutoloadNamespace(
-    'Exeu\ObjectMerger\Annotation',
-    array(
-        __DIR__ . '/../lib/'
-));
+interface AccessorInterface
+{
+    public function getValue(\ReflectionProperty $property, $object);
+
+    public function setValue(\ReflectionProperty $property, $object, $value);
+} 
