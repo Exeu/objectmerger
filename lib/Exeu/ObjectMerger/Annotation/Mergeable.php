@@ -30,4 +30,6 @@ class Mergeable
     public $collectionMergeStrategy = null;
 
     public $accessor = 'reflection';
+
+    public $emptyValueStrategy = 'ignore';
 } 

@@ -58,6 +58,7 @@ class AnnotationDriver implements DriverInterface
                     $propertyMetadata->type = $propertyAnnotation->type;
                     $propertyMetadata->objectIdentifier = $propertyAnnotation->objectIdentifier;
                     $propertyMetadata->collectionMergeStrategy = $propertyAnnotation->collectionMergeStrategy;
+                    $propertyMetadata->emptyValueStrategy = $propertyAnnotation->emptyValueStrategy;
 
                     $metadata->addPropertyMetadata($propertyMetadata);
                 }

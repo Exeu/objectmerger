@@ -27,11 +27,15 @@ class PropertyMetadata extends BasePropertyMetadata
 
     public $collectionMergeStrategy;
 
+    public $emptyValueStrategy = 'ignore';
+
     public function serialize()
     {
         return serialize(array(
             $this->type,
             $this->objectIdentifier,
+            $this->collectionMergeStrategy,
+            $this->emptyValueStrategy,
             parent::serialize()
         ));
     }
@@ -41,6 +45,8 @@ class PropertyMetadata extends BasePropertyMetadata
         list(
             $this->type,
             $this->objectIdentifier,
+            $this->collectionMergeStrategy,
+            $this->emptyValueStrategy,
             $parentStr
             ) = unserialize($str);
 
