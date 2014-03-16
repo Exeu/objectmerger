@@ -28,6 +28,26 @@ namespace Exeu\ObjectMerger\Annotation;
 class Mergeable
 {
     /**
+     * Constant for the propertyaccessor "reflection".
+     */
+    const ACCESSOR_REFLECTION    = 'reflection';
+
+    /**
+     * Constant for the propertyaccessor "public_method".
+     */
+    const ACCESSOR_PUBLIC_METHOD = 'public_method';
+
+    /**
+     * Constant for the "addMissing" mergingstrategy.
+     */
+    const MERGE_STRATEGY_ADD_MISSING = 'addMissing';
+
+    /**
+     * Constant for the emtpyvaluestrategy "ignore"
+     */
+    const EMPTY_VALUE_STRATEGY_IGNORE = 'ignore';
+
+    /**
      * @var string
      */
     public $type;
@@ -45,10 +65,10 @@ class Mergeable
     /**
      * @var string
      */
-    public $accessor = 'reflection';
+    public $accessor = Mergeable::ACCESSOR_REFLECTION;
 
     /**
      * @var string
      */
-    public $emptyValueStrategy = 'ignore';
+    public $emptyValueStrategy = Mergeable::EMPTY_VALUE_STRATEGY_IGNORE;
 }

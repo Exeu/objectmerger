@@ -17,6 +17,7 @@
 
 namespace Exeu\ObjectMerger;
 
+use Exeu\ObjectMerger\Annotation\Mergeable;
 use Exeu\ObjectMerger\Metadata\PropertyMetadata;
 
 /**
@@ -64,7 +65,7 @@ class MergingVisitor
             array_push($missingValues, $singleDominatingObject);
         }
 
-        if ($collectionMergeStrategy === 'addMissing') {
+        if ($collectionMergeStrategy === Mergeable::MERGE_STRATEGY_ADD_MISSING) {
             foreach ($missingValues as $missingValue) {
                 $mergeableObjectCollection[] = $missingValue;
             }

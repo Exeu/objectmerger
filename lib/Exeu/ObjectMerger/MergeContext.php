@@ -20,6 +20,7 @@ namespace Exeu\ObjectMerger;
 use Exeu\ObjectMerger\Accessor\AccessorInterface;
 use Exeu\ObjectMerger\Accessor\PublicMethodAccessor;
 use Exeu\ObjectMerger\Accessor\ReflectionAccessor;
+use Exeu\ObjectMerger\Annotation\Mergeable;
 use Exeu\ObjectMerger\Metadata\ClassMetadata;
 
 /**
@@ -70,10 +71,10 @@ class MergeContext
         $this->mergeTo = $mergeTo;
 
         switch ($this->metadata->accessor) {
-            case 'public_method':
+            case Mergeable::ACCESSOR_PUBLIC_METHOD:
                 $this->propertyAccessor = new PublicMethodAccessor();
                 break;
-            case 'reflection':
+            case Mergeable::ACCESSOR_REFLECTION:
             default:
                 $this->propertyAccessor = new ReflectionAccessor();
                 break;

@@ -82,13 +82,13 @@ class GraphWalker
             /** @var PropertyMetadata $comparableProperty */
             switch ($comparableProperty->type) {
                 case 'string':
-                    $this->visitor->mergeString($comparableProperty->reflection, $executionContext);
+                    $this->visitor->mergeString($comparableProperty, $executionContext);
                     break;
                 case 'object':
-                    $this->visitor->mergeObject($comparableProperty->reflection, $executionContext);
+                    $this->visitor->mergeObject($comparableProperty, $executionContext);
                     break;
                 case 'boolean':
-                    $this->visitor->mergeBoolean($comparableProperty->reflection, $executionContext);
+                    $this->visitor->mergeBoolean($comparableProperty, $executionContext);
                     break;
                 case 'Collection':
                     $this->visitor->mergeCollection($comparableProperty, $executionContext);
