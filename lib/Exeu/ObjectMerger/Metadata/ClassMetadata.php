@@ -39,7 +39,7 @@ class ClassMetadata extends BaseClassMetadata
     public function serialize()
     {
         return serialize(array(
-            $this->useSetter,
+            $this->accessor,
             parent::serialize()
         ));
     }
@@ -52,7 +52,7 @@ class ClassMetadata extends BaseClassMetadata
     public function unserialize($str)
     {
         list(
-            $this->useSetter,
+            $this->accessor,
             $parentStr
             ) = unserialize($str);
 
