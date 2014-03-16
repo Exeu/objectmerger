@@ -17,9 +17,29 @@
 
 namespace Exeu\ObjectMerger\Accessor;
 
+/**
+ * Interface AccessorInterface
+ *
+ * @author Jan Eichhorn <exeu65@googlemail.com>
+ */
 interface AccessorInterface
 {
+    /**
+     * Gets a value from a property within the passed object.
+     *
+     * @param \ReflectionProperty $property The property
+     * @param object              $object   The object
+     *
+     * @return mixed
+     */
     public function getValue(\ReflectionProperty $property, $object);
 
+    /**
+     * Sets a value on a property within the passed object.
+     *
+     * @param \ReflectionProperty $property The property
+     * @param object              $object   The object
+     * @param mixed               $value    The value to be setted
+     */
     public function setValue(\ReflectionProperty $property, $object, $value);
-} 
+}

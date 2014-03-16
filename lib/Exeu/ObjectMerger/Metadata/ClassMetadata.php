@@ -19,10 +19,23 @@ namespace Exeu\ObjectMerger\Metadata;
 
 use Metadata\ClassMetadata as BaseClassMetadata;
 
+/**
+ * Class ClassMetadata
+ *
+ * @author Jan Eichhorn <exeu65@googlemail.com>
+ */
 class ClassMetadata extends BaseClassMetadata
 {
+    /**
+     * @var string
+     */
     public $accessor = 'reflection';
 
+    /**
+     * Serializes the current ClassMetadata.
+     *
+     * @return string
+     */
     public function serialize()
     {
         return serialize(array(
@@ -31,6 +44,11 @@ class ClassMetadata extends BaseClassMetadata
         ));
     }
 
+    /**
+     * Deserializes the current ClassMetadata.
+     *
+     * @param string $str
+     */
     public function unserialize($str)
     {
         list(
@@ -40,4 +58,4 @@ class ClassMetadata extends BaseClassMetadata
 
         parent::unserialize($parentStr);
     }
-} 
+}

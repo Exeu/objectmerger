@@ -23,15 +23,32 @@ use Exeu\ObjectMerger\Metadata\ClassMetadata;
 use Metadata\Driver\DriverInterface;
 use Exeu\ObjectMerger\Metadata\PropertyMetadata;
 
+/**
+ * An implementation of the DriverInterface.
+ * This class creates Metadataobject by reading the class annotations.
+ *
+ * @author Jan Eichhorn <exeu65@googlemail.com>
+ */
 class AnnotationDriver implements DriverInterface
 {
+    /**
+     * @var AnnotationReader
+     */
     private $reader;
 
+    /**
+     * Constructor.
+     *
+     * @param AnnotationReader $reader
+     */
     public function __construct(AnnotationReader $reader)
     {
         $this->reader = $reader;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function loadMetadataForClass(\ReflectionClass $class)
     {
         $metadata = new ClassMetadata($class->getName());

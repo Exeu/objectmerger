@@ -17,13 +17,24 @@
 
 namespace Exeu\ObjectMerger\Accessor;
 
+/**
+ * Class ReflectionAccessor
+ *
+ * @author Jan Eichhorn <exeu65@googlemail.com>
+ */
 class ReflectionAccessor implements AccessorInterface
 {
+    /**
+     * {@inheritDoc}
+     */
     public function getValue(\ReflectionProperty $property, $object)
     {
         return $property->getValue($object);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function setValue(\ReflectionProperty $property, $object, $value)
     {
         $property->setValue($object, $value);

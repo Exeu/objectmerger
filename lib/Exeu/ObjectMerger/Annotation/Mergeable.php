@@ -18,18 +18,37 @@
 namespace Exeu\ObjectMerger\Annotation;
 
 /**
+ * Class Mergeable
+ *
+ * @author Jan Eichhorn <exeu65@googlemail.com>
+ *
  * @Annotation
  * @Target({"PROPERTY", "CLASS"})
  */
 class Mergeable
 {
+    /**
+     * @var string
+     */
     public $type;
 
+    /**
+     * @var string
+     */
     public $objectIdentifier = null;
 
+    /**
+     * @var string
+     */
     public $collectionMergeStrategy = null;
 
+    /**
+     * @var string
+     */
     public $accessor = 'reflection';
 
+    /**
+     * @var string
+     */
     public $emptyValueStrategy = 'ignore';
-} 
+}

@@ -28,18 +28,29 @@ use Metadata\MetadataFactory;
  */
 class ObjectMerger
 {
-    public function merge($object1, $object2)
+    /**
+     * Merges to objects together.
+     *
+     * @param object $mergeFrom Sourceobject
+     * @param object $mergeTo   Targetobject
+     */
+    public function merge($mergeFrom, $mergeTo)
     {
-        $visitor = $this->createMergingVisitor($object1);
-        $visitor->visit($object1, $object2);
+        $graphWalker = $this->createMergingVisitor();
+        $graphWalker->accept($mergeFrom, $mergeTo);
     }
 
-    protected function createMergingVisitor($rootObject)
+    /**
+     * Creates a new GraphWalker.
+     *
+     * @return GraphWalker
+     */
+    protected function createMergingVisitor()
     {
         $reader = new AnnotationReader();
-        $metadataDriver = new AnnotationDriver($reader);
+        $metadataDriver  = new AnnotationDriver($reader);
         $metadataFactory = new MetadataFactory($metadataDriver);
 
-        return new MergingVisitor($metadataFactory, $rootObject);
+        return new GraphWalker($metadataFactory);
     }
 }

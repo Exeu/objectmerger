@@ -19,16 +19,38 @@ namespace Exeu\ObjectMerger\Metadata;
 
 use Metadata\PropertyMetadata as BasePropertyMetadata;
 
+/**
+ * Class PropertyMetadata
+ *
+ * @author Jan Eichhorn <exeu65@googlemail.com>
+ */
 class PropertyMetadata extends BasePropertyMetadata
 {
+    /**
+     * @var string
+     */
     public $type;
 
+    /**
+     * @var string
+     */
     public $objectIdentifier;
 
+    /**
+     * @var string
+     */
     public $collectionMergeStrategy;
 
+    /**
+     * @var string
+     */
     public $emptyValueStrategy = 'ignore';
 
+    /**
+     * Serializes the current propertymetadata.
+     *
+     * @return string
+     */
     public function serialize()
     {
         return serialize(array(
@@ -40,6 +62,11 @@ class PropertyMetadata extends BasePropertyMetadata
         ));
     }
 
+    /**
+     * Deserializes the current propertymetadata.
+     *
+     * @param string $str
+     */
     public function unserialize($str)
     {
         list(
@@ -52,4 +79,4 @@ class PropertyMetadata extends BasePropertyMetadata
 
         parent::unserialize($parentStr);
     }
-} 
+}

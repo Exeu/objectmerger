@@ -17,37 +17,111 @@
 
 namespace Exeu\ObjectMerger;
 
-use Metadata\MetadataFactory;
+use Exeu\ObjectMerger\Metadata\PropertyMetadata;
 
+/**
+ * Class MergingVisitor
+ *
+ * @author Jan Eichhorn <exeu65@googlemail.com>
+ */
 class MergingVisitor
 {
-    protected $visitedObjects = array();
-
-    private $metadataFactory;
-
-    private $rootObject;
-
-    public function __construct(MetadataFactory $metadataFactory, $rootObject)
+    /**
+     * Merges a collection of objects.
+     *
+     * @param PropertyMetadata $property Metadata of the property
+     * @param MergeContext     $context  The current mergingcontext
+     */
+    public function mergeCollection(PropertyMetadata $property, MergeContext $context)
     {
-        $this->metadataFactory = $metadataFactory;
-        $this->rootObject = $rootObject;
-    }
+        $objectIdentifier        = $property->objectIdentifier;
+        $reflectionProperty      = $property->reflection;
+        $collectionMergeStrategy = $property->collectionMergeStrategy;
 
-    public function visit($object1, $object2)
-    {
-        if (get_class($object1) !== get_class($object2)) {
-            return;
+        $dominatingObjectCollection = $reflectionProperty->getValue($context->getMergeFrom());
+        $mergeableObjectCollection  = $reflectionProperty->getValue($context->getMergeTo());
+
+        $missingValues = array();
+
+        foreach ($dominatingObjectCollection as $singleDominatingObject) {
+            $reflectionClass   = new \ReflectionClass($singleDominatingObject);
+
+            $comparsionIdentifier = $reflectionClass->getProperty($objectIdentifier);
+            $comparsionIdentifier->setAccessible(true);
+            $comparsionIdentifierValue = $comparsionIdentifier->getValue($singleDominatingObject);
+
+            foreach ($mergeableObjectCollection as $mergeableObject) {
+                $mergeableObjectComparsionIdentifierValue = $comparsionIdentifier->getValue($mergeableObject);
+
+                if ($comparsionIdentifierValue == $mergeableObjectComparsionIdentifierValue) {
+                    $context->getGraphWalker()->accept($singleDominatingObject, $mergeableObject);
+                    continue 2;
+                }
+            }
+
+            array_push($missingValues, $singleDominatingObject);
         }
 
-        $objectMetadata = $this->metadataFactory->getMetadataForClass(get_class($object1));
+        if ($collectionMergeStrategy === 'addMissing') {
+            foreach ($missingValues as $missingValue) {
+                $mergeableObjectCollection[] = $missingValue;
+            }
 
-        if (isset($this->visitedObjects[spl_object_hash($object1)])) {
-            return;
+            $context->getPropertyAccessor()->setValue(
+                $reflectionProperty,
+                $context->getMergeTo(),
+                $mergeableObjectCollection
+            );
         }
-
-        $this->visitedObjects[spl_object_hash($object1)] = true;
-
-        $executionContext = new MergeContext($objectMetadata, $this, $object1, $object2);
-        $executionContext->merge();
     }
-} 
+
+    /**
+     * Merges a simple boolean property.
+     *
+     * @param PropertyMetadata $property Metadata of the property
+     * @param MergeContext     $context  The current mergingcontext
+     */
+    public function mergeBoolean(PropertyMetadata $property, MergeContext $context)
+    {
+        $reflectionProperty = $property->reflection;
+
+        $context->getPropertyAccessor()->setValue(
+            $reflectionProperty,
+            $context->getMergeTo(),
+            (boolean) $context->getPropertyAccessor()->getValue($reflectionProperty, $context->getMergeFrom())
+        );
+    }
+
+    /**
+     * Merges a simple string property.
+     *
+     * @param PropertyMetadata $property Metadata of the property
+     * @param MergeContext     $context  The current mergingcontext
+     */
+    public function mergeString(PropertyMetadata $property, MergeContext $context)
+    {
+        $reflectionProperty = $property->reflection;
+
+        $context->getPropertyAccessor()->setValue(
+            $reflectionProperty,
+            $context->getMergeTo(),
+            (string) $context->getPropertyAccessor()->getValue($reflectionProperty, $context->getMergeFrom())
+        );
+    }
+
+    /**
+     * Merges an object property.
+     *
+     * @param PropertyMetadata $property Metadata of the property
+     * @param MergeContext     $context  The current mergingcontext
+     */
+    public function mergeObject(PropertyMetadata $property, MergeContext $context)
+    {
+        $reflectionProperty = $property->reflection;
+
+        $context->getGraphWalker()->accept(
+            $reflectionProperty->getValue($context->getMergeFrom()),
+            $reflectionProperty->getValue($context->getMergeTo())
+        );
+    }
+}

@@ -17,29 +17,58 @@
 
 namespace Exeu\ObjectMerger;
 
+use Exeu\ObjectMerger\Accessor\AccessorInterface;
 use Exeu\ObjectMerger\Accessor\PublicMethodAccessor;
 use Exeu\ObjectMerger\Accessor\ReflectionAccessor;
-use Exeu\ObjectMerger\Metadata\PropertyMetadata;
-use Metadata\ClassHierarchyMetadata;
+use Exeu\ObjectMerger\Metadata\ClassMetadata;
 
+
+/**
+ * Class MergeContext
+ *
+ * @author Jan Eichhorn <exeu65@googlemail.com>
+ */
 class MergeContext
 {
+    /**
+     * @var ClassMetadata
+     */
     private $metadata;
 
-    private $mergingVisitor;
+    /**
+     * @var GraphWalker
+     */
+    private $graphWalker;
 
-    private $object1;
+    /**
+     * @var object
+     */
+    private $mergeFrom;
 
-    private $object2;
+    /**
+     * @var object
+     */
+    private $mergeTo;
 
+    /**
+     * @var AccessorInterface
+     */
     private $propertyAccessor;
 
-    public function __construct(ClassHierarchyMetadata $metadata, MergingVisitor $mergingVisitor, $object1, $object2)
+    /**
+     * Constructor.
+     *
+     * @param ClassMetadata $metadata
+     * @param GraphWalker   $graphWalker
+     * @param object        $mergeFrom
+     * @param object        $mergeTo
+     */
+    public function __construct(ClassMetadata $metadata, GraphWalker $graphWalker, $mergeFrom, $mergeTo)
     {
-        $this->metadata = $metadata->getRootClassMetadata();
-        $this->mergingVisitor = $mergingVisitor;
-        $this->object1 = $object1;
-        $this->object2 = $object2;
+        $this->metadata = $metadata;
+        $this->graphWalker = $graphWalker;
+        $this->mergeFrom = $mergeFrom;
+        $this->mergeTo = $mergeTo;
 
         switch ($this->metadata->accessor) {
             case 'public_method':
@@ -52,90 +81,83 @@ class MergeContext
         }
     }
 
-    public function merge()
+    /**
+     * @param GraphWalker $graphWalker
+     */
+    public function setGraphWalker($graphWalker)
     {
-        foreach ($this->metadata->propertyMetadata as $comparableProperty) {
-            /** @var PropertyMetadata $comparableProperty */
-            switch ($comparableProperty->type) {
-                case 'string':
-                    $this->mergeString($comparableProperty->reflection);
-                    break;
-                case 'object':
-                    $this->mergeObject($comparableProperty->reflection);
-                    break;
-                case 'boolean':
-                    $this->mergeBoolean($comparableProperty->reflection);
-                    break;
-                case 'Collection':
-                    $this->mergeCollection($comparableProperty);
-                    break;
-            }
-        }
+        $this->graphWalker = $graphWalker;
     }
 
-    protected function mergeCollection($property)
+    /**
+     * @return GraphWalker
+     */
+    public function getGraphWalker()
     {
-        $objectIdentifier        = $property->objectIdentifier;
-        $reflectionProperty      = $property->reflection;
-        $collectionMergeStrategy = $property->collectionMergeStrategy;
-
-        $dominatingObjectCollection = $reflectionProperty->getValue($this->object1);
-        $mergeableObjectCollection  = $reflectionProperty->getValue($this->object2);
-
-        $missingValues = array();
-
-        foreach ($dominatingObjectCollection as $singleDominatingObject) {
-            $reflectionClass   = new \ReflectionClass($singleDominatingObject);
-
-            $comparsionIdentifier = $reflectionClass->getProperty($objectIdentifier);
-            $comparsionIdentifier->setAccessible(true);
-            $comparsionIdentifierValue = $comparsionIdentifier->getValue($singleDominatingObject);
-
-            foreach ($mergeableObjectCollection as $mergeableObject) {
-                $mergeableObjectComparsionIdentifierValue = $comparsionIdentifier->getValue($mergeableObject);
-
-                if ($comparsionIdentifierValue == $mergeableObjectComparsionIdentifierValue) {
-                    $this->mergingVisitor->visit($singleDominatingObject, $mergeableObject);
-                    continue 2;
-                }
-            }
-
-            array_push($missingValues, $singleDominatingObject);
-        }
-
-        if ($collectionMergeStrategy === 'addMissing') {
-            foreach ($missingValues as $missingValue) {
-                $mergeableObjectCollection[] = $missingValue;
-            }
-
-            $this->propertyAccessor->setValue(
-                $reflectionProperty,
-                $this->object2,
-                $mergeableObjectCollection
-            );
-        }
+        return $this->graphWalker;
     }
 
-    protected function mergeBoolean(\ReflectionProperty $property)
+    /**
+     * @param object $mergeFrom
+     */
+    public function setMergeFrom($mergeFrom)
     {
-        $this->propertyAccessor->setValue(
-            $property,
-            $this->object2,
-            (boolean) $this->propertyAccessor->getValue($property, $this->object1)
-        );
+        $this->mergeFrom = $mergeFrom;
     }
 
-    protected function mergeString(\ReflectionProperty $property)
+    /**
+     * @return object
+     */
+    public function getMergeFrom()
     {
-        $this->propertyAccessor->setValue(
-            $property,
-            $this->object2,
-            (string) $this->propertyAccessor->getValue($property, $this->object1)
-        );
+        return $this->mergeFrom;
     }
 
-    protected function mergeObject(\ReflectionProperty $property)
+    /**
+     * @param object $mergeTo
+     */
+    public function setMergeTo($mergeTo)
     {
-        $this->mergingVisitor->visit($property->getValue($this->object1), $property->getValue($this->object2));
+        $this->mergeTo = $mergeTo;
     }
-} 
+
+    /**
+     * @return object
+     */
+    public function getMergeTo()
+    {
+        return $this->mergeTo;
+    }
+
+    /**
+     * @param ClassMetadata $metadata
+     */
+    public function setMetadata($metadata)
+    {
+        $this->metadata = $metadata;
+    }
+
+    /**
+     * @return ClassMetadata
+     */
+    public function getMetadata()
+    {
+        return $this->metadata;
+    }
+
+    /**
+     * @param AccessorInterface $propertyAccessor
+     */
+    public function setPropertyAccessor($propertyAccessor)
+    {
+        $this->propertyAccessor = $propertyAccessor;
+    }
+
+    /**
+     * @return AccessorInterface
+     */
+    public function getPropertyAccessor()
+    {
+        return $this->propertyAccessor;
+    }
+}

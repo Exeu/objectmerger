@@ -17,8 +17,16 @@
 
 namespace Exeu\ObjectMerger\Accessor;
 
+/**
+ * Class PublicMethodAccessor
+ *
+ * @author Jan Eichhorn <exeu65@googlemail.com>
+ */
 class PublicMethodAccessor implements AccessorInterface
 {
+    /**
+     * {@inheritDoc}
+     */
     public function getValue(\ReflectionProperty $property, $object)
     {
         $propertyName   = $property->getName();
@@ -32,6 +40,9 @@ class PublicMethodAccessor implements AccessorInterface
         return $declaringClass->getMethod($getterName)->invoke($object);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function setValue(\ReflectionProperty $property, $object, $value)
     {
         $propertyName   = $property->getName();

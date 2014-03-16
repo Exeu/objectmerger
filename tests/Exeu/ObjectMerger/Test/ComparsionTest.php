@@ -83,15 +83,11 @@ class ComparsionTest extends \PHPUnit_Framework_TestCase
         $objectAA->setObj($testAA);
 
         var_dump($objectAA);
-        foreach ($objectAA->getFriends() as $friend) {
-            var_dump($friend);
-        }
+
 
         $bla->merge($objectA, $objectAA);
 
-        foreach ($objectAA->getFriends() as $friend) {
-            var_dump($friend);
-        }
+
         var_dump($objectAA);
     }
 } 
