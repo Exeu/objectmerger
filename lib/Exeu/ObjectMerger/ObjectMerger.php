@@ -43,7 +43,7 @@ class ObjectMerger
      */
     public function merge($mergeFrom, $mergeTo)
     {
-        $graphWalker = $this->createMergingVisitor();
+        $graphWalker = $this->createGraphWalker();
         $graphWalker->accept($mergeFrom, $mergeTo);
     }
 
@@ -52,7 +52,7 @@ class ObjectMerger
      *
      * @return GraphWalker
      */
-    protected function createMergingVisitor()
+    protected function createGraphWalker()
     {
         $reader = new AnnotationReader();
         $metadataDriver  = new AnnotationDriver($reader);

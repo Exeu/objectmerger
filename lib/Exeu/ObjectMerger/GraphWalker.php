@@ -62,6 +62,12 @@ class GraphWalker
      */
     public function accept($mergeFrom, $mergeTo)
     {
+        // No object is passed either for mergeFrom or mergeTo
+        if (!is_object($mergeFrom) || !is_object($mergeTo)) {
+            return;
+        }
+
+        // The class of the compared objects is not equal.
         if (get_class($mergeFrom) !== get_class($mergeTo)) {
             return;
         }
@@ -73,6 +79,7 @@ class GraphWalker
             return;
         }
 
+        // Preventing the object to be visited again.
         $this->visitedObjects[spl_object_hash($mergeFrom)] = true;
 
         // Preparing a new ExecutionContext
