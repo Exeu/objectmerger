@@ -28,6 +28,8 @@ use Metadata\MetadataFactory;
  */
 class ObjectMerger
 {
+    const VERSION = '1.0.0-DEV';
+
     /**
      * Merges to objects together.
      *
