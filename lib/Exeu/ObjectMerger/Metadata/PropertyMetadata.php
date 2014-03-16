@@ -20,7 +20,7 @@ namespace Exeu\ObjectMerger\Metadata;
 use Metadata\PropertyMetadata as BasePropertyMetadata;
 
 /**
- * Class PropertyMetadata
+ * Metadata for a single property.
  *
  * @author Jan Eichhorn <exeu65@googlemail.com>
  */

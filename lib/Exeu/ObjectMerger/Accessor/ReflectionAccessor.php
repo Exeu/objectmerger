@@ -18,7 +18,7 @@
 namespace Exeu\ObjectMerger\Accessor;
 
 /**
- * Class ReflectionAccessor
+ * Base implementation of AccessorInterface using the relfection api.
  *
  * @author Jan Eichhorn <exeu65@googlemail.com>
  */

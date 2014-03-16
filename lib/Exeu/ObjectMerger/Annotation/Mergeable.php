@@ -18,7 +18,7 @@
 namespace Exeu\ObjectMerger\Annotation;
 
 /**
- * Class Mergeable
+ * Mergeable annotaion.
  *
  * @author Jan Eichhorn <exeu65@googlemail.com>
  *

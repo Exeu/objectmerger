@@ -20,7 +20,7 @@ namespace Exeu\ObjectMerger\Metadata;
 use Metadata\ClassMetadata as BaseClassMetadata;
 
 /**
- * Class ClassMetadata
+ * Metadata for a single class.
  *
  * @author Jan Eichhorn <exeu65@googlemail.com>
  */

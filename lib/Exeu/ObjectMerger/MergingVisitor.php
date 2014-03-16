@@ -20,7 +20,9 @@ namespace Exeu\ObjectMerger;
 use Exeu\ObjectMerger\Metadata\PropertyMetadata;
 
 /**
- * Class MergingVisitor
+ * The MergingVisitor is responsible for the merging process.
+ *
+ * It can handle simple variabletypes and collections of objects.
  *
  * @author Jan Eichhorn <exeu65@googlemail.com>
  */

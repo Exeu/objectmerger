@@ -22,7 +22,12 @@ use Exeu\ObjectMerger\Metadata\Driver\AnnotationDriver;
 use Metadata\MetadataFactory;
 
 /**
- * Class ObjectMerger
+ * The ObjectMerger merges to objects of any complexity.
+ *
+ * Therefor it creates a GraphWalker which goes through any property of a class
+ * and delegating the merging process to a MergingVisitor.
+ *
+ * Which properties are mergeable is defined whith the Mergeable metadata.
  *
  * @author Jan Eichhorn <exeu65@googlemail.com>
  */

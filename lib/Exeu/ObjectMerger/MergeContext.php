@@ -22,9 +22,8 @@ use Exeu\ObjectMerger\Accessor\PublicMethodAccessor;
 use Exeu\ObjectMerger\Accessor\ReflectionAccessor;
 use Exeu\ObjectMerger\Metadata\ClassMetadata;
 
-
 /**
- * Class MergeContext
+ * This contextclass is instanciated for each object comparsion.
  *
  * @author Jan Eichhorn <exeu65@googlemail.com>
  */

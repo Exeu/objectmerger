@@ -20,7 +20,8 @@ namespace Exeu\ObjectMerger;
 use Metadata\MetadataFactory;
 
 /**
- * Class GraphWalker
+ * The GraphWalker walks through every property of the object
+ * and calls on each comparable property the visitor.
  *
  * @author Jan Eichhorn <exeu65@googlemail.com>
  */

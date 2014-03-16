@@ -18,7 +18,7 @@
 namespace Exeu\ObjectMerger\Accessor;
 
 /**
- * Interface AccessorInterface
+ * Interface AccessorInterface.
  *
  * @author Jan Eichhorn <exeu65@googlemail.com>
  */

@@ -18,7 +18,7 @@
 namespace Exeu\ObjectMerger\Accessor;
 
 /**
- * Class PublicMethodAccessor
+ * Base implementation of AccessorInterface using public methods (getter, setter) via reflection.
  *
  * @author Jan Eichhorn <exeu65@googlemail.com>
  */
