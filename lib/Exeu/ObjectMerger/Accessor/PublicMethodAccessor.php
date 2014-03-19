@@ -31,7 +31,7 @@ class PublicMethodAccessor implements AccessorInterface
     {
         $propertyName   = $property->getName();
         $declaringClass = $property->getDeclaringClass();
-        $getterName     = sprintf('get%s', lcfirst($propertyName));
+        $getterName     = sprintf('get%s', ucfirst($propertyName));
 
         if (!$declaringClass->hasMethod($getterName)) {
             throw new \RuntimeException('No getter found for' . $propertyName);
@@ -47,7 +47,7 @@ class PublicMethodAccessor implements AccessorInterface
     {
         $propertyName   = $property->getName();
         $declaringClass = $property->getDeclaringClass();
-        $setterName     = sprintf('set%s', lcfirst($propertyName));
+        $setterName     = sprintf('set%s', ucfirst($propertyName));
 
         if (!$declaringClass->hasMethod($setterName)) {
             throw new \RuntimeException('No setter found for' . $propertyName);
