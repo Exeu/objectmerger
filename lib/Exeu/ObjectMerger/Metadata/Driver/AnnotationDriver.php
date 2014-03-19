@@ -17,7 +17,8 @@
 
 namespace Exeu\ObjectMerger\Metadata\Driver;
 
-use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\Reader;
+use Exeu\ObjectMerger\Annotation\ClassDetermineStrategy;
 use Exeu\ObjectMerger\Annotation\Mergeable;
 use Exeu\ObjectMerger\Metadata\ClassMetadata;
 use Metadata\Driver\DriverInterface;
@@ -41,7 +42,7 @@ class AnnotationDriver implements DriverInterface
      *
      * @param AnnotationReader $reader
      */
-    public function __construct(AnnotationReader $reader)
+    public function __construct(Reader $reader)
     {
         $this->reader = $reader;
     }
@@ -58,6 +59,8 @@ class AnnotationDriver implements DriverInterface
         foreach ($classAnnotations as $classAnnotation) {
             if ($classAnnotation instanceof Mergeable) {
                 $metadata->accessor = $classAnnotation->accessor;
+            } elseif ($classAnnotation instanceof ClassDetermineStrategy) {
+                $metadata->classDetermineStrategy = $classAnnotation->type;
             }
         }
 

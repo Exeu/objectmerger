@@ -17,6 +17,11 @@
 
 namespace Exeu\ObjectMerger;
 
+use Exeu\ObjectMerger\Annotation\ClassDetermineStrategy;
+use Exeu\ObjectMerger\ClassnameComparer\ClassInstance;
+use Exeu\ObjectMerger\ClassnameComparer\GetClass;
+use Exeu\ObjectMerger\ClassnameComparer\ReflectionParent;
+use Exeu\ObjectMerger\Metadata\ClassMetadata;
 use Metadata\MetadataFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -49,6 +54,11 @@ class GraphWalker
     protected $eventDispatcher;
 
     /**
+     * @var array
+     */
+    protected $classnameComparer = array();
+
+    /**
      * Constructor.
      *
      * @param MetadataFactory          $metadataFactory
@@ -59,6 +69,9 @@ class GraphWalker
         $this->metadataFactory = $metadataFactory;
         $this->eventDispatcher = $eventDispatcher;
         $this->visitor         = new MergingVisitor();
+
+        $this->classnameComparer[ClassDetermineStrategy::STRATEGY_GET_CLASS]   = new GetClass();
+        $this->classnameComparer[ClassDetermineStrategy::STRATEGY_INSTANCE_OF] = new ClassInstance();
     }
 
     /**
@@ -75,13 +88,11 @@ class GraphWalker
             return;
         }
 
-        // The class of the compared objects is not equal.
-        if (get_class($mergeFrom) !== get_class($mergeTo)) {
+        $classMetadata = $this->metadataFactory->getMetadataForClass(get_class($mergeTo));
+
+        if (!$this->applyClassnameComparer($classMetadata, $mergeFrom, $mergeTo)) {
             return;
         }
-
-        $objectMetadata = $this->metadataFactory->getMetadataForClass(get_class($mergeFrom));
-        $classMetadata  = $objectMetadata->getRootClassMetadata();
 
         if (isset($this->visitedObjects[spl_object_hash($mergeFrom)])) {
             return;
@@ -110,6 +121,30 @@ class GraphWalker
                     break;
             }
         }
+    }
+
+    /**
+     * Applies a matching classnamecomparer.
+     *
+     * @param ClassMetadata $classMetadata
+     * @param object        $mergeFrom
+     * @param object        $mergeTo
+     *
+     * @return mixed
+     * @throws \RuntimeException
+     */
+    protected function applyClassnameComparer(ClassMetadata $classMetadata, $mergeFrom, $mergeTo)
+    {
+        $strategy = $classMetadata->classDetermineStrategy;
+
+        if (!array_key_exists($strategy, $this->classnameComparer)) {
+            throw new \RuntimeException(sprintf(
+                'The classDetermineStrategy "%s" does not exist!',
+                $strategy
+            ));
+        }
+
+        return $this->classnameComparer[$strategy]->equals($mergeFrom, $mergeTo);
     }
 
     /**

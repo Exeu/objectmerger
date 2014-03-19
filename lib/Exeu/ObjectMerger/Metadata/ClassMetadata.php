@@ -17,7 +17,7 @@
 
 namespace Exeu\ObjectMerger\Metadata;
 
-use Metadata\ClassMetadata as BaseClassMetadata;
+use Metadata\MergeableClassMetadata as BaseClassMetadata;
 
 /**
  * Metadata for a single class.
@@ -32,6 +32,11 @@ class ClassMetadata extends BaseClassMetadata
     public $accessor = 'reflection';
 
     /**
+     * @var string
+     */
+    public $classDetermineStrategy = 'get_class';
+
+    /**
      * Serializes the current ClassMetadata.
      *
      * @return string
@@ -40,6 +45,7 @@ class ClassMetadata extends BaseClassMetadata
     {
         return serialize(array(
             $this->accessor,
+            $this->classDetermineStrategy,
             parent::serialize()
         ));
     }
@@ -53,6 +59,7 @@ class ClassMetadata extends BaseClassMetadata
     {
         list(
             $this->accessor,
+            $this->classDetermineStrategy,
             $parentStr
             ) = unserialize($str);
 
