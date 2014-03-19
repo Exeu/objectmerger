@@ -76,7 +76,7 @@ class AnnotationDriver implements DriverInterface
         foreach ($propertiesMetadata as $key => $propertyMetadata) {
             foreach ($propertiesAnnotations[$key] as $propertyAnnotation) {
                 if ($propertyAnnotation instanceof Mergeable) {
-                    $propertyMetadata->type = $propertyAnnotation->type;
+                    $propertyMetadata->setType($propertyAnnotation->type);
                     $propertyMetadata->collectionMergeStrategy = $propertyAnnotation->collectionMergeStrategy;
                     $propertyMetadata->emptyValueStrategy = $propertyAnnotation->emptyValueStrategy;
 

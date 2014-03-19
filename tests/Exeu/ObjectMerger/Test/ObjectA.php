@@ -50,7 +50,7 @@ class ObjectA
     /**
      * @var
      *
-     * @Mergeable(type="Collection", collectionMergeStrategy="addMissing")
+     * @Mergeable(type="Collection<Exeu\ObjectMerger\Test\ObjectB>", collectionMergeStrategy="addMissing")
      */
     private $friends;
 

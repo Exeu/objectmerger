@@ -47,7 +47,7 @@ class MergingVisitor
         $missingValues = array();
 
         foreach ($dominatingObjectCollection as $singleDominatingObject) {
-            $reflectionClass   = new \ReflectionClass($singleDominatingObject);
+            $reflectionClass = new \ReflectionClass($singleDominatingObject);
 
             $comparsionIdentifier = $reflectionClass->getProperty($objectIdentifier);
             $comparsionIdentifier->setAccessible(true);

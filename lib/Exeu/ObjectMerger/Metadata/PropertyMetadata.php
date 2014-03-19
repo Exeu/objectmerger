@@ -34,6 +34,11 @@ class PropertyMetadata extends BasePropertyMetadata
     /**
      * @var string
      */
+    public $innerType;
+
+    /**
+     * @var string
+     */
     public $objectIdentifier;
 
     /**
@@ -47,6 +52,27 @@ class PropertyMetadata extends BasePropertyMetadata
     public $emptyValueStrategy = 'ignore';
 
     /**
+     * Sets the type and pareses some information about collections.
+     *
+     * @param $type
+     * @throws \Exception
+     */
+    public function setType($type)
+    {
+        $matches = array();
+
+        if (!preg_match('/^(.*?)(?:<([^>]*)>)?$/', $type, $matches)) {
+            throw new \Exception('Unable to parse type: ' . $type);
+        }
+
+        $this->type = $matches[1];
+
+        if (count($matches) > 2) {
+            $this->innerType = $matches[2];
+        }
+    }
+
+    /**
      * Serializes the current propertymetadata.
      *
      * @return string
@@ -55,6 +81,7 @@ class PropertyMetadata extends BasePropertyMetadata
     {
         return serialize(array(
             $this->type,
+            $this->innerType,
             $this->objectIdentifier,
             $this->collectionMergeStrategy,
             $this->emptyValueStrategy,
@@ -71,6 +98,7 @@ class PropertyMetadata extends BasePropertyMetadata
     {
         list(
             $this->type,
+            $this->innerType,
             $this->objectIdentifier,
             $this->collectionMergeStrategy,
             $this->emptyValueStrategy,

@@ -19,6 +19,7 @@ namespace Exeu\ObjectMerger;
 
 use Metadata\MetadataFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Exeu\ObjectMerger\Metadata\PropertyMetadata;
 
 /**
  * The GraphWalker walks through every property of the object
@@ -106,7 +107,6 @@ class GraphWalker
                     $this->visitor->mergeBoolean($comparableProperty, $executionContext);
                     break;
                 case 'Collection':
-                    var_dump($comparableProperty);
                     $this->visitor->mergeCollection($comparableProperty, $executionContext);
                     break;
             }
