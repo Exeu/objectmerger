@@ -50,7 +50,7 @@ class ObjectA
     /**
      * @var
      *
-     * @Mergeable(type="Collection", objectIdentifier="id", collectionMergeStrategy="addMissing")
+     * @Mergeable(type="Collection", collectionMergeStrategy="addMissing")
      */
     private $friends;
 

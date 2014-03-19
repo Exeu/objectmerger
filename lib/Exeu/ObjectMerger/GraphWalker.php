@@ -17,11 +17,6 @@
 
 namespace Exeu\ObjectMerger;
 
-use Exeu\ObjectMerger\Annotation\ClassDetermineStrategy;
-use Exeu\ObjectMerger\ClassnameComparer\ClassInstance;
-use Exeu\ObjectMerger\ClassnameComparer\GetClass;
-use Exeu\ObjectMerger\ClassnameComparer\ReflectionParent;
-use Exeu\ObjectMerger\Metadata\ClassMetadata;
 use Metadata\MetadataFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -54,11 +49,6 @@ class GraphWalker
     protected $eventDispatcher;
 
     /**
-     * @var array
-     */
-    protected $classnameComparer = array();
-
-    /**
      * Constructor.
      *
      * @param MetadataFactory          $metadataFactory
@@ -69,9 +59,6 @@ class GraphWalker
         $this->metadataFactory = $metadataFactory;
         $this->eventDispatcher = $eventDispatcher;
         $this->visitor         = new MergingVisitor();
-
-        $this->classnameComparer[ClassDetermineStrategy::STRATEGY_GET_CLASS]   = new GetClass();
-        $this->classnameComparer[ClassDetermineStrategy::STRATEGY_INSTANCE_OF] = new ClassInstance();
     }
 
     /**
@@ -83,25 +70,27 @@ class GraphWalker
      */
     public function accept($mergeFrom, $mergeTo)
     {
-        // No object is passed either for mergeFrom or mergeTo
+        // No object is passed either for mergeFrom or mergeTo.
         if (!is_object($mergeFrom) || !is_object($mergeTo)) {
+            return;
+        }
+
+        $class = get_class($mergeFrom);
+        if (!$mergeTo instanceof $class) {
+            return;
+        }
+
+        // If the object is not visited.
+        if (isset($this->visitedObjects[spl_object_hash($mergeFrom)])) {
             return;
         }
 
         $classMetadata = $this->metadataFactory->getMetadataForClass(get_class($mergeTo));
 
-        if (!$this->applyClassnameComparer($classMetadata, $mergeFrom, $mergeTo)) {
-            return;
-        }
-
-        if (isset($this->visitedObjects[spl_object_hash($mergeFrom)])) {
-            return;
-        }
-
         // Preventing the object to be visited again.
         $this->visitedObjects[spl_object_hash($mergeFrom)] = true;
 
-        // Preparing a new ExecutionContext
+        // Preparing a new ExecutionContext.
         $executionContext = new MergeContext($classMetadata, $this, $mergeFrom, $mergeTo);
 
         foreach ($classMetadata->propertyMetadata as $comparableProperty) {
@@ -117,34 +106,11 @@ class GraphWalker
                     $this->visitor->mergeBoolean($comparableProperty, $executionContext);
                     break;
                 case 'Collection':
+                    var_dump($comparableProperty);
                     $this->visitor->mergeCollection($comparableProperty, $executionContext);
                     break;
             }
         }
-    }
-
-    /**
-     * Applies a matching classnamecomparer.
-     *
-     * @param ClassMetadata $classMetadata
-     * @param object        $mergeFrom
-     * @param object        $mergeTo
-     *
-     * @return mixed
-     * @throws \RuntimeException
-     */
-    protected function applyClassnameComparer(ClassMetadata $classMetadata, $mergeFrom, $mergeTo)
-    {
-        $strategy = $classMetadata->classDetermineStrategy;
-
-        if (!array_key_exists($strategy, $this->classnameComparer)) {
-            throw new \RuntimeException(sprintf(
-                'The classDetermineStrategy "%s" does not exist!',
-                $strategy
-            ));
-        }
-
-        return $this->classnameComparer[$strategy]->equals($mergeFrom, $mergeTo);
     }
 
     /**

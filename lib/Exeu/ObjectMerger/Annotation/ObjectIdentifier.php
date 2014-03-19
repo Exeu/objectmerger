@@ -15,22 +15,20 @@
  * limitations under the License.
  */
 
-namespace Exeu\ObjectMerger;
+namespace Exeu\ObjectMerger\Annotation;
 
 /**
- * Interface for describing the needed method of a type comparsion.
+ * ObjectIdentifier annotaion.
  *
  * @author Jan Eichhorn <exeu65@googlemail.com>
+ *
+ * @Annotation
+ * @Target({"CLASS"})
  */
-interface ClassnameComparerInterface
+class ObjectIdentifier
 {
     /**
-     * Finds out if the passed objects are from the same type.
-     *
-     * @param $objectA
-     * @param $objectB
-     *
-     * @return boolean
+     * @var array
      */
-    public function equals($objectA, $objectB);
-} 
+    public $fields;
+}

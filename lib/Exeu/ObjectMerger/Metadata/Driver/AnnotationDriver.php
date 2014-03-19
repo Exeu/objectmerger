@@ -20,6 +20,7 @@ namespace Exeu\ObjectMerger\Metadata\Driver;
 use Doctrine\Common\Annotations\Reader;
 use Exeu\ObjectMerger\Annotation\ClassDetermineStrategy;
 use Exeu\ObjectMerger\Annotation\Mergeable;
+use Exeu\ObjectMerger\Annotation\ObjectIdentifier;
 use Exeu\ObjectMerger\Metadata\ClassMetadata;
 use Metadata\Driver\DriverInterface;
 use Exeu\ObjectMerger\Metadata\PropertyMetadata;
@@ -33,14 +34,14 @@ use Exeu\ObjectMerger\Metadata\PropertyMetadata;
 class AnnotationDriver implements DriverInterface
 {
     /**
-     * @var AnnotationReader
+     * @var Reader
      */
     private $reader;
 
     /**
      * Constructor.
      *
-     * @param AnnotationReader $reader
+     * @param Reader $reader
      */
     public function __construct(Reader $reader)
     {
@@ -59,12 +60,12 @@ class AnnotationDriver implements DriverInterface
         foreach ($classAnnotations as $classAnnotation) {
             if ($classAnnotation instanceof Mergeable) {
                 $metadata->accessor = $classAnnotation->accessor;
-            } elseif ($classAnnotation instanceof ClassDetermineStrategy) {
-                $metadata->classDetermineStrategy = $classAnnotation->type;
+            } elseif ($classAnnotation instanceof ObjectIdentifier) {
+                $metadata->objectIdentifier = $classAnnotation->fields;
             }
         }
 
-        $propertiesMetadata = array();
+        $propertiesMetadata    = array();
         $propertiesAnnotations = array();
 
         foreach ($class->getProperties() as $property) {
@@ -76,7 +77,6 @@ class AnnotationDriver implements DriverInterface
             foreach ($propertiesAnnotations[$key] as $propertyAnnotation) {
                 if ($propertyAnnotation instanceof Mergeable) {
                     $propertyMetadata->type = $propertyAnnotation->type;
-                    $propertyMetadata->objectIdentifier = $propertyAnnotation->objectIdentifier;
                     $propertyMetadata->collectionMergeStrategy = $propertyAnnotation->collectionMergeStrategy;
                     $propertyMetadata->emptyValueStrategy = $propertyAnnotation->emptyValueStrategy;
 

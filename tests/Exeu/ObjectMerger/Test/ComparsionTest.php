@@ -17,14 +17,24 @@
 
 namespace Exeu\ObjectMerger\Test;
 
+use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Collections\ArrayCollection;
+use Exeu\ObjectMerger\Metadata\Driver\AnnotationDriver;
 use Exeu\ObjectMerger\ObjectMerger;
+use Metadata\MetadataFactory;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class ComparsionTest extends \PHPUnit_Framework_TestCase
 {
     public function testX()
     {
-        $bla = new ObjectMerger();
+        $reader  = new AnnotationReader();
+        $driver  = new AnnotationDriver($reader);
+        $factory = new MetadataFactory($driver);
+
+        $eventDispatcher = new EventDispatcher();
+
+        $bla = new ObjectMerger($factory, $eventDispatcher);
 
         $objectA = new ObjectA();
         $objectB = new ObjectB();
@@ -82,12 +92,6 @@ class ComparsionTest extends \PHPUnit_Framework_TestCase
         $objectAA->setFriends($coll2);
         $objectAA->setObj($testAA);
 
-        var_dump($objectAA);
-
-
         $bla->merge($objectA, $objectAA);
-
-
-        var_dump($objectAA);
     }
 } 

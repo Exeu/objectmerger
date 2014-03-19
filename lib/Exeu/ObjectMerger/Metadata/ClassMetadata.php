@@ -34,7 +34,7 @@ class ClassMetadata extends BaseClassMetadata
     /**
      * @var string
      */
-    public $classDetermineStrategy = 'get_class';
+    public $objectIdentifier = array();
 
     /**
      * Serializes the current ClassMetadata.
@@ -45,7 +45,7 @@ class ClassMetadata extends BaseClassMetadata
     {
         return serialize(array(
             $this->accessor,
-            $this->classDetermineStrategy,
+            $this->objectIdentifier,
             parent::serialize()
         ));
     }
@@ -59,7 +59,7 @@ class ClassMetadata extends BaseClassMetadata
     {
         list(
             $this->accessor,
-            $this->classDetermineStrategy,
+            $this->objectIdentifier,
             $parentStr
             ) = unserialize($str);
 

@@ -30,7 +30,7 @@ class Mergeable
     /**
      * Constant for the propertyaccessor "reflection".
      */
-    const ACCESSOR_REFLECTION    = 'reflection';
+    const ACCESSOR_REFLECTION = 'reflection';
 
     /**
      * Constant for the propertyaccessor "public_method".
@@ -51,11 +51,6 @@ class Mergeable
      * @var string
      */
     public $type;
-
-    /**
-     * @var string
-     */
-    public $objectIdentifier = null;
 
     /**
      * @var string
