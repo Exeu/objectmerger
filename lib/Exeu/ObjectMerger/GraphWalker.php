@@ -18,6 +18,7 @@
 namespace Exeu\ObjectMerger;
 
 use Metadata\MetadataFactory;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * The GraphWalker walks through every property of the object
@@ -43,14 +44,21 @@ class GraphWalker
     protected $visitor;
 
     /**
+     * @var EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    /**
      * Constructor.
      *
-     * @param MetadataFactory $metadataFactory
+     * @param MetadataFactory          $metadataFactory
+     * @param EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(MetadataFactory $metadataFactory)
+    public function __construct(MetadataFactory $metadataFactory, EventDispatcherInterface $eventDispatcher)
     {
         $this->metadataFactory = $metadataFactory;
-        $this->visitor = new MergingVisitor();
+        $this->eventDispatcher = $eventDispatcher;
+        $this->visitor         = new MergingVisitor();
     }
 
     /**

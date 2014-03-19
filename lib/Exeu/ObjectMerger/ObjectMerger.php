@@ -20,6 +20,7 @@ namespace Exeu\ObjectMerger;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Exeu\ObjectMerger\Metadata\Driver\AnnotationDriver;
 use Metadata\MetadataFactory;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * The ObjectMerger merges to objects of any complexity.
@@ -36,6 +37,22 @@ class ObjectMerger
     const VERSION = '1.0.0-DEV';
 
     /**
+     * @var GraphWalker
+     */
+    protected $graphWalker;
+
+    /**
+     * Constructor.
+     *
+     * @param MetadataFactory          $metadataFactory
+     * @param EventDispatcherInterface $eventDispatcher
+     */
+    public function __construct(MetadataFactory $metadataFactory, EventDispatcherInterface $eventDispatcher)
+    {
+        $this->graphWalker = new GraphWalker($metadataFactory, $eventDispatcher);
+    }
+
+    /**
      * Merges to objects together.
      *
      * @param object $mergeFrom Sourceobject
@@ -43,21 +60,6 @@ class ObjectMerger
      */
     public function merge($mergeFrom, $mergeTo)
     {
-        $graphWalker = $this->createGraphWalker();
-        $graphWalker->accept($mergeFrom, $mergeTo);
-    }
-
-    /**
-     * Creates a new GraphWalker.
-     *
-     * @return GraphWalker
-     */
-    protected function createGraphWalker()
-    {
-        $reader = new AnnotationReader();
-        $metadataDriver  = new AnnotationDriver($reader);
-        $metadataFactory = new MetadataFactory($metadataDriver);
-
-        return new GraphWalker($metadataFactory);
+        $this->graphWalker->accept($mergeFrom, $mergeTo);
     }
 }
