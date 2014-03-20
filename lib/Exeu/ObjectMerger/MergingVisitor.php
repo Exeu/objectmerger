@@ -29,7 +29,6 @@ use Exeu\ObjectMerger\Metadata\PropertyMetadata;
  */
 class MergingVisitor
 {
-    protected static $x = 1;
     /**
      * Merges a collection of objects.
      *
