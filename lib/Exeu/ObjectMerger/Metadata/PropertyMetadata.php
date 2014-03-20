@@ -39,11 +39,6 @@ class PropertyMetadata extends BasePropertyMetadata
     /**
      * @var string
      */
-    public $objectIdentifier;
-
-    /**
-     * @var string
-     */
     public $collectionMergeStrategy;
 
     /**
@@ -82,7 +77,6 @@ class PropertyMetadata extends BasePropertyMetadata
         return serialize(array(
             $this->type,
             $this->innerType,
-            $this->objectIdentifier,
             $this->collectionMergeStrategy,
             $this->emptyValueStrategy,
             parent::serialize()
@@ -99,7 +93,6 @@ class PropertyMetadata extends BasePropertyMetadata
         list(
             $this->type,
             $this->innerType,
-            $this->objectIdentifier,
             $this->collectionMergeStrategy,
             $this->emptyValueStrategy,
             $parentStr

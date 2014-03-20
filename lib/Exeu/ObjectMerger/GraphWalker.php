@@ -122,4 +122,14 @@ class GraphWalker
     {
         return $this->visitor;
     }
+
+    /**
+     * Gets MetadataFactory
+     *
+     * @return MetadataFactory
+     */
+    public function getMetadataFactory()
+    {
+        return $this->metadataFactory;
+    }
 }
