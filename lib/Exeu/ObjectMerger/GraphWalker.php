@@ -86,7 +86,7 @@ class GraphWalker
             return;
         }
 
-        $classMetadata = $this->metadataFactory->getMetadataForClass(get_class($mergeTo));
+        $classMetadata = $this->metadataFactory->getMetadataForClass(get_class($mergeFrom));
 
         // Preventing the object to be visited again.
         $this->visitedObjects[spl_object_hash($mergeFrom)] = true;

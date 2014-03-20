@@ -40,9 +40,6 @@ class MergingVisitor
      */
     public function mergeCollection(PropertyMetadata $property, MergeContext $context)
     {
-        var_dump(self::$x);
-        var_dump($property->type . "<". $property->innerType .">");
-        self::$x++;
         $innerType               = $property->innerType;
         $reflectionProperty      = $property->reflection;
         $collectionMergeStrategy = $property->collectionMergeStrategy;
@@ -66,6 +63,7 @@ class MergingVisitor
             $reflectionClass = new \ReflectionClass($singleDominatingObject);
 
             foreach ($mergeableObjectCollection as $mergeableObject) {
+
                 $identifierMap = array_fill_keys(array_values($objectIdentifier), false);
 
                 foreach ($objectIdentifier as $key) {
@@ -84,9 +82,9 @@ class MergingVisitor
                     $context->getGraphWalker()->accept($singleDominatingObject, $mergeableObject);
                     continue 2;
                 }
-
-                array_push($missingValues, $mergeableObject);
             }
+
+            array_push($missingValues, $singleDominatingObject);
         }
 
         if ($collectionMergeStrategy === Mergeable::MERGE_STRATEGY_ADD_MISSING) {
