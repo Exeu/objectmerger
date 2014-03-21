@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-namespace Exeu\ObjectMerger\Accessor;
+namespace Exeu\ObjectMerger;
 
 /**
  * Interface AccessorInterface.
@@ -42,4 +42,11 @@ interface AccessorInterface
      * @param mixed               $value    The value to be setted
      */
     public function setValue(\ReflectionProperty $property, $object, $value);
+
+    /**
+     * Returns the name of the propertyAccessor (e.g. public_method)
+     *
+     * @return string
+     */
+    public function getName();
 }

@@ -15,39 +15,31 @@
  * limitations under the License.
  */
 
-namespace Exeu\ObjectMerger\Accessor;
-
-use Exeu\ObjectMerger\AccessorInterface;
-use Exeu\ObjectMerger\Annotation\Mergeable;
+namespace Exeu\ObjectMerger;
 
 /**
- * Base implementation of AccessorInterface using the relfection api.
+ * Interface PropertyAccessorRegistryInterface.
  *
  * @author Jan Eichhorn <exeu65@googlemail.com>
  */
-class ReflectionAccessor implements AccessorInterface
+interface PropertyAccessorRegistryInterface
 {
     /**
-     * {@inheritDoc}
+     * Adds a property accessor.
+     *
+     * @param AccessorInterface $propertyAccessor
+     *
+     * @return PropertyAccessorRegistry
      */
-    public function getValue(\ReflectionProperty $property, $object)
-    {
-        return $property->getValue($object);
-    }
+    public function addPropertyAccessor(AccessorInterface $propertyAccessor);
 
     /**
-     * {@inheritDoc}
+     * Returns a registered propertyAccessor.
+     *
+     * @param $name
+     *
+     * @return AccessorInterface
+     * @throws \Exception
      */
-    public function setValue(\ReflectionProperty $property, $object, $value)
-    {
-        $property->setValue($object, $value);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getName()
-    {
-        return Mergeable::ACCESSOR_REFLECTION;
-    }
+    public function getProperyAccessor($name);
 }

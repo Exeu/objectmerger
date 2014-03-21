@@ -17,6 +17,9 @@
 
 namespace Exeu\ObjectMerger\Accessor;
 
+use Exeu\ObjectMerger\AccessorInterface;
+use Exeu\ObjectMerger\Annotation\Mergeable;
+
 /**
  * Base implementation of AccessorInterface using public methods (getter, setter) via reflection.
  *
@@ -54,5 +57,13 @@ class PublicMethodAccessor implements AccessorInterface
         }
 
         $declaringClass->getMethod($setterName)->invoke($object, $value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getName()
+    {
+        return Mergeable::ACCESSOR_PUBLIC_METHOD;
     }
 }

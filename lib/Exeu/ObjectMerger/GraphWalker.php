@@ -17,6 +17,7 @@
 
 namespace Exeu\ObjectMerger;
 
+use Exeu\ObjectMerger\Accessor\PropertyAccessorRegistry;
 use Metadata\MetadataFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Exeu\ObjectMerger\Metadata\PropertyMetadata;
@@ -50,16 +51,27 @@ class GraphWalker
     protected $eventDispatcher;
 
     /**
+     * @var PropertyAccessorRegistry
+     */
+    protected $propertyAccessorRegistry;
+
+    /**
      * Constructor.
      *
      * @param MetadataFactory          $metadataFactory
      * @param EventDispatcherInterface $eventDispatcher
+     * @param PropertyAccessorRegistry $propertyAccessorRegistry
      */
-    public function __construct(MetadataFactory $metadataFactory, EventDispatcherInterface $eventDispatcher)
+    public function __construct(
+        MetadataFactory $metadataFactory,
+        EventDispatcherInterface $eventDispatcher,
+        PropertyAccessorRegistry $propertyAccessorRegistry
+    )
     {
-        $this->metadataFactory = $metadataFactory;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->visitor         = new MergingVisitor();
+        $this->metadataFactory          = $metadataFactory;
+        $this->eventDispatcher          = $eventDispatcher;
+        $this->visitor                  = new MergingVisitor();
+        $this->propertyAccessorRegistry = $propertyAccessorRegistry;
     }
 
     /**
@@ -131,5 +143,15 @@ class GraphWalker
     public function getMetadataFactory()
     {
         return $this->metadataFactory;
+    }
+
+    /**
+     * Gets PropertyAccessorRegistry
+     *
+     * @return PropertyAccessorRegistry
+     */
+    public function getPropertyAccessorRegistry()
+    {
+        return $this->propertyAccessorRegistry;
     }
 }

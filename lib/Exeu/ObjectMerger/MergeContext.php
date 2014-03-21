@@ -17,7 +17,7 @@
 
 namespace Exeu\ObjectMerger;
 
-use Exeu\ObjectMerger\Accessor\AccessorInterface;
+use Exeu\ObjectMerger\AccessorInterface;
 use Exeu\ObjectMerger\Accessor\PublicMethodAccessor;
 use Exeu\ObjectMerger\Accessor\ReflectionAccessor;
 use Exeu\ObjectMerger\Annotation\Mergeable;
@@ -65,28 +65,13 @@ class MergeContext
      */
     public function __construct(ClassMetadata $metadata, GraphWalker $graphWalker, $mergeFrom, $mergeTo)
     {
-        $this->metadata = $metadata;
-        $this->graphWalker = $graphWalker;
-        $this->mergeFrom = $mergeFrom;
-        $this->mergeTo = $mergeTo;
-
-        switch ($this->metadata->accessor) {
-            case Mergeable::ACCESSOR_PUBLIC_METHOD:
-                $this->propertyAccessor = new PublicMethodAccessor();
-                break;
-            case Mergeable::ACCESSOR_REFLECTION:
-            default:
-                $this->propertyAccessor = new ReflectionAccessor();
-                break;
-        }
-    }
-
-    /**
-     * @param GraphWalker $graphWalker
-     */
-    public function setGraphWalker($graphWalker)
-    {
-        $this->graphWalker = $graphWalker;
+        $this->metadata         = $metadata;
+        $this->graphWalker      = $graphWalker;
+        $this->mergeFrom        = $mergeFrom;
+        $this->mergeTo          = $mergeTo;
+        $this->propertyAccessor = $graphWalker
+            ->getPropertyAccessorRegistry()
+            ->getProperyAccessor($this->metadata->accessor);
     }
 
     /**
@@ -98,27 +83,11 @@ class MergeContext
     }
 
     /**
-     * @param object $mergeFrom
-     */
-    public function setMergeFrom($mergeFrom)
-    {
-        $this->mergeFrom = $mergeFrom;
-    }
-
-    /**
      * @return object
      */
     public function getMergeFrom()
     {
         return $this->mergeFrom;
-    }
-
-    /**
-     * @param object $mergeTo
-     */
-    public function setMergeTo($mergeTo)
-    {
-        $this->mergeTo = $mergeTo;
     }
 
     /**
@@ -130,27 +99,11 @@ class MergeContext
     }
 
     /**
-     * @param ClassMetadata $metadata
-     */
-    public function setMetadata($metadata)
-    {
-        $this->metadata = $metadata;
-    }
-
-    /**
      * @return ClassMetadata
      */
     public function getMetadata()
     {
         return $this->metadata;
-    }
-
-    /**
-     * @param AccessorInterface $propertyAccessor
-     */
-    public function setPropertyAccessor($propertyAccessor)
-    {
-        $this->propertyAccessor = $propertyAccessor;
     }
 
     /**

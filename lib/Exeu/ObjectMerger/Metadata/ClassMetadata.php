@@ -45,7 +45,7 @@ class ClassMetadata extends BaseClassMetadata
     {
         return serialize(array(
             $this->accessor,
-            $this->fields,
+            $this->objectIdentifier,
             parent::serialize()
         ));
     }
@@ -59,7 +59,7 @@ class ClassMetadata extends BaseClassMetadata
     {
         list(
             $this->accessor,
-            $this->fields,
+            $this->objectIdentifier,
             $parentStr
             ) = unserialize($str);
 

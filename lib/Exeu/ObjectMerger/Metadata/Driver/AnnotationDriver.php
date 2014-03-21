@@ -69,7 +69,7 @@ class AnnotationDriver implements DriverInterface
         $propertiesAnnotations = array();
 
         foreach ($class->getProperties() as $property) {
-            $propertiesMetadata[] = new PropertyMetadata($class->getName(), $property->getName());
+            $propertiesMetadata[]    = new PropertyMetadata($class->getName(), $property->getName());
             $propertiesAnnotations[] = $this->reader->getPropertyAnnotations($property);
         }
 

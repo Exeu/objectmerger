@@ -18,36 +18,41 @@
 namespace Exeu\ObjectMerger\Accessor;
 
 use Exeu\ObjectMerger\AccessorInterface;
-use Exeu\ObjectMerger\Annotation\Mergeable;
+use Exeu\ObjectMerger\PropertyAccessorRegistryInterface;
 
 /**
- * Base implementation of AccessorInterface using the relfection api.
+ * A simple registry to register propertyaccessors.
  *
  * @author Jan Eichhorn <exeu65@googlemail.com>
  */
-class ReflectionAccessor implements AccessorInterface
+class PropertyAccessorRegistry implements PropertyAccessorRegistryInterface
 {
     /**
+     * @var array
+     */
+    protected $propertyAccessors = array();
+
+    /**
      * {@inheritDoc}
      */
-    public function getValue(\ReflectionProperty $property, $object)
+    public function addPropertyAccessor(AccessorInterface $propertyAccessor)
     {
-        return $property->getValue($object);
+        if (!array_key_exists($propertyAccessor->getName(), $this->propertyAccessors)) {
+            $this->propertyAccessors[$propertyAccessor->getName()] = $propertyAccessor;
+        }
+
+        return $this;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setValue(\ReflectionProperty $property, $object, $value)
+    public function getProperyAccessor($name)
     {
-        $property->setValue($object, $value);
-    }
+        if (!array_key_exists($name, $this->propertyAccessors)) {
+            throw new \Exception(sprintf('No Propertyaccessor with the name "%s" found.', $name));
+        }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getName()
-    {
-        return Mergeable::ACCESSOR_REFLECTION;
+        return $this->propertyAccessors[$name];
     }
 }

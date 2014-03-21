@@ -17,8 +17,9 @@
 
 namespace Exeu\ObjectMerger;
 
-use Doctrine\Common\Annotations\AnnotationReader;
-use Exeu\ObjectMerger\Metadata\Driver\AnnotationDriver;
+use Exeu\ObjectMerger\PropertyAccessorRegistryInterface;
+use Exeu\ObjectMerger\Accessor\PublicMethodAccessor;
+use Exeu\ObjectMerger\Accessor\ReflectionAccessor;
 use Metadata\MetadataFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -44,12 +45,30 @@ class ObjectMerger
     /**
      * Constructor.
      *
-     * @param MetadataFactory          $metadataFactory
-     * @param EventDispatcherInterface $eventDispatcher
+     * @param MetadataFactory                   $metadataFactory
+     * @param EventDispatcherInterface          $eventDispatcher
+     * @param PropertyAccessorRegistryInterface $propertyAccessorRegistry
      */
-    public function __construct(MetadataFactory $metadataFactory, EventDispatcherInterface $eventDispatcher)
+    public function __construct(
+        MetadataFactory $metadataFactory,
+        EventDispatcherInterface $eventDispatcher,
+        PropertyAccessorRegistryInterface $propertyAccessorRegistry
+    )
     {
-        $this->graphWalker = new GraphWalker($metadataFactory, $eventDispatcher);
+        $this->addDefaultPropertyAccessors($propertyAccessorRegistry);
+        $this->graphWalker = new GraphWalker($metadataFactory, $eventDispatcher, $propertyAccessorRegistry);
+    }
+
+    /**
+     * Adds the default PropertyAccessors to the registry.
+     *
+     * @param PropertyAccessorRegistryInterface $propertyAccessorRegistry
+     */
+    protected function addDefaultPropertyAccessors(PropertyAccessorRegistryInterface $propertyAccessorRegistry)
+    {
+        $propertyAccessorRegistry
+            ->addPropertyAccessor(new ReflectionAccessor())
+            ->addPropertyAccessor(new PublicMethodAccessor());
     }
 
     /**
