@@ -48,15 +48,23 @@ class ObjectMerger
      * @param MetadataFactory                   $metadataFactory
      * @param EventDispatcherInterface          $eventDispatcher
      * @param PropertyAccessorRegistryInterface $propertyAccessorRegistry
+     * @param MergeHandlerRegistryInterface     $mergeHandlerRegistry
      */
     public function __construct(
         MetadataFactory $metadataFactory,
         EventDispatcherInterface $eventDispatcher,
-        PropertyAccessorRegistryInterface $propertyAccessorRegistry
+        PropertyAccessorRegistryInterface $propertyAccessorRegistry,
+        MergeHandlerRegistryInterface $mergeHandlerRegistry
     )
     {
         $this->addDefaultPropertyAccessors($propertyAccessorRegistry);
-        $this->graphWalker = new GraphWalker($metadataFactory, $eventDispatcher, $propertyAccessorRegistry);
+
+        $this->graphWalker = new GraphWalker(
+            $metadataFactory,
+            $eventDispatcher,
+            $propertyAccessorRegistry,
+            $mergeHandlerRegistry
+        );
     }
 
     /**

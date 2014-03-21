@@ -18,25 +18,25 @@
 namespace Exeu\ObjectMerger;
 
 /**
- * Interface PropertyAccessorRegistryInterface.
+ * Interface MergeHandlerRegistryInterface.
  *
  * @author Jan Eichhorn <exeu65@googlemail.com>
  */
-interface PropertyAccessorRegistryInterface
+interface MergeHandlerRegistryInterface
 {
     /**
-     * Adds a property accessor.
+     * Adds a mergehandler.
      *
-     * @param AccessorInterface $propertyAccessor
+     * @param MergeHandlerInterface $mergeHandler
      */
-    public function addPropertyAccessor(AccessorInterface $propertyAccessor);
+    public function addMergeHandler(MergeHandlerInterface $mergeHandler);
 
     /**
-     * Returns a registered propertyAccessor.
+     * Returns a registered mergehandler depending on the type.
      *
-     * @param string $name
+     * @param string $type
      *
-     * @return AccessorInterface
+     * @return MergeHandlerInterface
      */
-    public function getPropertyAccessor($name);
+    public function getMergeHandler($type);
 }

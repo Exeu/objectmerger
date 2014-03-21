@@ -30,12 +30,33 @@ use Exeu\ObjectMerger\Metadata\PropertyMetadata;
 class MergingVisitor
 {
     /**
+     * Tries to merge two objects by self registered merging handler.
+     *
+     * @param PropertyMetadata $property
+     * @param MergeContext     $context
+     *
+     * @throws \Exception
+     */
+    public function mergeByHandler(PropertyMetadata $property, MergeContext $context)
+    {
+        $mergeHandler = $context->getGraphWalker()->getMergeHandlerRegistry()->getMergeHandler($property->type);
+
+        if (!$mergeHandler) {
+            throw new \Exception(sprintf('No handler found for the type "%s"', $property->type));
+        }
+
+        $mergeHandler->merge($property, $context);
+    }
+
+    /**
      * Merges a collection of objects.
      *
      * @param PropertyMetadata $property Metadata of the property
      * @param MergeContext     $context  The current mergingcontext
      *
      * @throws \Exception
+     *
+     * @TODO This mehtod needs some refacotring.
      */
     public function mergeCollection(PropertyMetadata $property, MergeContext $context)
     {
@@ -86,6 +107,7 @@ class MergingVisitor
             array_push($missingValues, $singleDominatingObject);
         }
 
+        // @TODO this should take place in own classes for collection mergestrategies.
         if ($collectionMergeStrategy === Mergeable::MERGE_STRATEGY_ADD_MISSING) {
             foreach ($missingValues as $missingValue) {
                 $mergeableObjectCollection[] = $missingValue;

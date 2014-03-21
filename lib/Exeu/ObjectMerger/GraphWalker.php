@@ -18,9 +18,11 @@
 namespace Exeu\ObjectMerger;
 
 use Exeu\ObjectMerger\Accessor\PropertyAccessorRegistry;
+use Exeu\ObjectMerger\Event\MergeEvent;
 use Metadata\MetadataFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Exeu\ObjectMerger\Metadata\PropertyMetadata;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
 /**
  * The GraphWalker walks through every property of the object
@@ -51,27 +53,35 @@ class GraphWalker
     protected $eventDispatcher;
 
     /**
-     * @var PropertyAccessorRegistry
+     * @var PropertyAccessorRegistryInterface
      */
     protected $propertyAccessorRegistry;
 
     /**
+     * @var MergeHandlerRegistryInterface
+     */
+    protected $mergeHandlerRegistry;
+
+    /**
      * Constructor.
      *
-     * @param MetadataFactory          $metadataFactory
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param PropertyAccessorRegistry $propertyAccessorRegistry
+     * @param MetadataFactory                   $metadataFactory
+     * @param EventDispatcherInterface          $eventDispatcher
+     * @param PropertyAccessorRegistryInterface $propertyAccessorRegistry
+     * @param MergeHandlerRegistryInterface     $mergeHandlerRegistry
      */
     public function __construct(
         MetadataFactory $metadataFactory,
         EventDispatcherInterface $eventDispatcher,
-        PropertyAccessorRegistry $propertyAccessorRegistry
+        PropertyAccessorRegistryInterface $propertyAccessorRegistry,
+        MergeHandlerRegistryInterface $mergeHandlerRegistry
     )
     {
         $this->metadataFactory          = $metadataFactory;
         $this->eventDispatcher          = $eventDispatcher;
-        $this->visitor                  = new MergingVisitor();
         $this->propertyAccessorRegistry = $propertyAccessorRegistry;
+        $this->mergeHandlerRegistry     = $mergeHandlerRegistry;
+        $this->visitor                  = new MergingVisitor();
     }
 
     /**
@@ -106,23 +116,39 @@ class GraphWalker
         // Preparing a new ExecutionContext.
         $executionContext = new MergeContext($classMetadata, $this, $mergeFrom, $mergeTo);
 
+        // Dispatching the premerge event.
+        $this->eventDispatcher->dispatch(
+            Events::PRE_MERGE,
+            new MergeEvent(MergeEvent::TYPE_PRE, $executionContext)
+        );
+
         foreach ($classMetadata->propertyMetadata as $comparableProperty) {
             /** @var PropertyMetadata $comparableProperty */
             switch ($comparableProperty->type) {
                 case 'string':
-                    $this->visitor->mergeString($comparableProperty, $executionContext);
-                    break;
                 case 'object':
-                    $this->visitor->mergeObject($comparableProperty, $executionContext);
-                    break;
                 case 'boolean':
-                    $this->visitor->mergeBoolean($comparableProperty, $executionContext);
-                    break;
                 case 'Collection':
-                    $this->visitor->mergeCollection($comparableProperty, $executionContext);
+                    // calls a type specified merge method on the visitor.
+                    $this->visitor->{'merge' . ucfirst($comparableProperty->type)}(
+                        $comparableProperty,
+                        $executionContext
+                    );
+                    break;
+                default:
+                    // If the type is not one of the default types, try to merge this property by a handler.
+                    try {
+                        $this->visitor->mergeByHandler($comparableProperty, $executionContext);
+                    } catch (\Exception $e) { }
                     break;
             }
         }
+
+        // Dispatching the postmerge event.
+        $this->eventDispatcher->dispatch(
+            Events::POST_MERGE,
+            new MergeEvent(MergeEvent::TYPE_POST, $executionContext)
+        );
     }
 
     /**
@@ -153,5 +179,15 @@ class GraphWalker
     public function getPropertyAccessorRegistry()
     {
         return $this->propertyAccessorRegistry;
+    }
+
+    /**
+     * Gets MergeHandlerRegistry
+     *
+     * @return MergeHandlerRegistryInterface
+     */
+    public function getMergeHandlerRegistry()
+    {
+        return $this->mergeHandlerRegistry;
     }
 }

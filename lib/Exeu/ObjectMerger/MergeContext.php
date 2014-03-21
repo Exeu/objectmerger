@@ -71,7 +71,7 @@ class MergeContext
         $this->mergeTo          = $mergeTo;
         $this->propertyAccessor = $graphWalker
             ->getPropertyAccessorRegistry()
-            ->getProperyAccessor($this->metadata->accessor);
+            ->getPropertyAccessor($this->metadata->accessor);
     }
 
     /**

@@ -18,25 +18,19 @@
 namespace Exeu\ObjectMerger;
 
 /**
- * Interface PropertyAccessorRegistryInterface.
+ * All possible objectmerger events.
  *
  * @author Jan Eichhorn <exeu65@googlemail.com>
  */
-interface PropertyAccessorRegistryInterface
+class Events
 {
     /**
-     * Adds a property accessor.
-     *
-     * @param AccessorInterface $propertyAccessor
+     * The pre merge event type.
      */
-    public function addPropertyAccessor(AccessorInterface $propertyAccessor);
+    const PRE_MERGE  = 'exeu.object_merger.events.pre_merge';
 
     /**
-     * Returns a registered propertyAccessor.
-     *
-     * @param string $name
-     *
-     * @return AccessorInterface
+     * The post merge event type.
      */
-    public function getPropertyAccessor($name);
-}
+    const POST_MERGE = 'exeu.object_merger.events.post_merge';
+} 

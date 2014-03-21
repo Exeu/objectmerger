@@ -15,30 +15,30 @@
  * limitations under the License.
  */
 
-namespace Exeu\ObjectMerger\Accessor;
+namespace Exeu\ObjectMerger\MergeHandler;
 
-use Exeu\ObjectMerger\AccessorInterface;
-use Exeu\ObjectMerger\PropertyAccessorRegistryInterface;
+use Exeu\ObjectMerger\MergeHandlerInterface;
+use Exeu\ObjectMerger\MergeHandlerRegistryInterface;
 
 /**
- * A simple registry to register propertyaccessors.
+ * A simple registry to register custom mergehandler.
  *
  * @author Jan Eichhorn <exeu65@googlemail.com>
  */
-class PropertyAccessorRegistry implements PropertyAccessorRegistryInterface
+class MergeHandlerRegistry implements MergeHandlerRegistryInterface
 {
     /**
      * @var array
      */
-    protected $propertyAccessors = array();
+    protected $mergeHandler = array();
 
     /**
      * {@inheritDoc}
      */
-    public function addPropertyAccessor(AccessorInterface $propertyAccessor)
+    public function addMergeHandler(MergeHandlerInterface $mergeHandler)
     {
-        if (!array_key_exists($propertyAccessor->getName(), $this->propertyAccessors)) {
-            $this->propertyAccessors[$propertyAccessor->getName()] = $propertyAccessor;
+        if (!array_key_exists($mergeHandler->getType(), $this->mergeHandler)) {
+            $this->mergeHandler[$mergeHandler->getType()] = $mergeHandler;
         }
 
         return $this;
@@ -47,12 +47,8 @@ class PropertyAccessorRegistry implements PropertyAccessorRegistryInterface
     /**
      * {@inheritDoc}
      */
-    public function getPropertyAccessor($name)
+    public function getMergeHandler($type)
     {
-        if (!array_key_exists($name, $this->propertyAccessors)) {
-            throw new \Exception(sprintf('No Propertyaccessor with the name "%s" found.', $name));
-        }
-
-        return $this->propertyAccessors[$name];
+        return array_key_exists($type, $this->mergeHandler) ? $this->mergeHandler[$type] : null;
     }
 }

@@ -17,26 +17,33 @@
 
 namespace Exeu\ObjectMerger;
 
+use Exeu\ObjectMerger\Metadata\PropertyMetadata;
+
 /**
- * Interface PropertyAccessorRegistryInterface.
+ * Interface MergeHandlerInterface.
  *
  * @author Jan Eichhorn <exeu65@googlemail.com>
  */
-interface PropertyAccessorRegistryInterface
+interface MergeHandlerInterface
 {
     /**
-     * Adds a property accessor.
+     * Performs a custom merge operation.
+     * Within the context you have access to the objectpair and the graphwalker.
      *
-     * @param AccessorInterface $propertyAccessor
+     * @param PropertyMetadata $propertyMetadata
+     * @param MergeContext     $context
      */
-    public function addPropertyAccessor(AccessorInterface $propertyAccessor);
+    public function merge(PropertyMetadata $propertyMetadata, MergeContext $context);
 
     /**
-     * Returns a registered propertyAccessor.
+     * Returns the type for which the handler should take the merge operation.
      *
-     * @param string $name
+     * <pre>
+     *   // @Mergeable(type="MyCustomObject")
+     *   $propertyName = 'foo';
+     * </pre>
      *
-     * @return AccessorInterface
+     * @return string
      */
-    public function getPropertyAccessor($name);
+    public function getType();
 }
