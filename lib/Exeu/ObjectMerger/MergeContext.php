@@ -17,10 +17,6 @@
 
 namespace Exeu\ObjectMerger;
 
-use Exeu\ObjectMerger\AccessorInterface;
-use Exeu\ObjectMerger\Accessor\PublicMethodAccessor;
-use Exeu\ObjectMerger\Accessor\ReflectionAccessor;
-use Exeu\ObjectMerger\Annotation\Mergeable;
 use Exeu\ObjectMerger\Metadata\ClassMetadata;
 
 /**

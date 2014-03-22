@@ -19,10 +19,12 @@ namespace Exeu\ObjectMerger\Test;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Collections\ArrayCollection;
+use Exeu\ObjectMerger\Accessor\PropertyAccessorRegistry;
+use Exeu\ObjectMerger\EventDispatcher\EventDispatcher;
+use Exeu\ObjectMerger\MergeHandler\MergeHandlerRegistry;
 use Exeu\ObjectMerger\Metadata\Driver\AnnotationDriver;
 use Exeu\ObjectMerger\ObjectMerger;
 use Metadata\MetadataFactory;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class ComparsionTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,8 +35,10 @@ class ComparsionTest extends \PHPUnit_Framework_TestCase
         $factory = new MetadataFactory($driver);
 
         $eventDispatcher = new EventDispatcher();
+        $propertyAccessorRegistry = new PropertyAccessorRegistry();
+        $mergeHanlderRegistry = new MergeHandlerRegistry();
 
-        $bla = new ObjectMerger($factory, $eventDispatcher);
+        $bla = new ObjectMerger($factory, $propertyAccessorRegistry, $mergeHanlderRegistry, $eventDispatcher);
 
         $objectA = new ObjectA();
         $objectB = new ObjectB();
@@ -48,12 +52,12 @@ class ComparsionTest extends \PHPUnit_Framework_TestCase
         $objectA->setName('Jan');
         $objectA->setStreet('blubb');
 
-        $objectB->setId(12);
+        $objectB->setId(1111);
         $objectB->setFullname('Jhon');
         $objectB->setIgnored(false);
 
         $objectC->setId(13);
-        $objectC->setFullname('Jhan');
+        $objectC->setFullname('Jhan2');
         $objectC->setIgnored(true);
 
         $coll = new ArrayCollection();
@@ -92,6 +96,10 @@ class ComparsionTest extends \PHPUnit_Framework_TestCase
         $objectAA->setFriends($coll2);
         $objectAA->setObj($testAA);
 
+        var_dump($objectAA->getFriends());
+
         $bla->merge($objectA, $objectAA);
+
+        var_dump($objectAA->getFriends());
     }
 } 

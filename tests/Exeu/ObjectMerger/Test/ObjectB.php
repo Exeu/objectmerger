@@ -18,7 +18,11 @@
 namespace Exeu\ObjectMerger\Test;
 
 use Exeu\ObjectMerger\Annotation\Mergeable;
+use Exeu\ObjectMerger\Annotation\ObjectIdentifier;
 
+/**
+ * @ObjectIdentifier(fields={"id"})
+ */
 class ObjectB
 {
     private $id;

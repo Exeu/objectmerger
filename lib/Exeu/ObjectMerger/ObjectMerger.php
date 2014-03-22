@@ -17,9 +17,10 @@
 
 namespace Exeu\ObjectMerger;
 
-use Exeu\ObjectMerger\EventDispatcher\EventDispatcher;
 use Exeu\ObjectMerger\Accessor\PublicMethodAccessor;
 use Exeu\ObjectMerger\Accessor\ReflectionAccessor;
+use Exeu\ObjectMerger\EventDispatcher\EventDispatcherInterface;
+use Exeu\ObjectMerger\MergeHandler\CollectionHandler;
 use Metadata\MetadataFactory;
 
 /**
@@ -47,16 +48,17 @@ class ObjectMerger
      * @param MetadataFactory                   $metadataFactory
      * @param PropertyAccessorRegistryInterface $propertyAccessorRegistry
      * @param MergeHandlerRegistryInterface     $mergeHandlerRegistry
-     * @param EventDispatcher                   $dispatcher
+     * @param EventDispatcherInterface          $dispatcher
      */
     public function __construct(
         MetadataFactory $metadataFactory,
         PropertyAccessorRegistryInterface $propertyAccessorRegistry,
         MergeHandlerRegistryInterface $mergeHandlerRegistry,
-        EventDispatcher $dispatcher
+        EventDispatcherInterface $dispatcher
     )
     {
         $this->addDefaultPropertyAccessors($propertyAccessorRegistry);
+        $this->addDefaultMergeHandler($mergeHandlerRegistry);
 
         $this->graphWalker = new GraphWalker(
             $metadataFactory,
@@ -64,6 +66,12 @@ class ObjectMerger
             $mergeHandlerRegistry,
             $dispatcher
         );
+    }
+
+    protected function addDefaultMergeHandler(MergeHandlerRegistryInterface $mergeHandlerRegistry)
+    {
+        $mergeHandlerRegistry
+            ->addMergeHandler(new CollectionHandler());
     }
 
     /**

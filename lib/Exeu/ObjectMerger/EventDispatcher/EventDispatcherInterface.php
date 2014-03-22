@@ -16,48 +16,38 @@
  */
 
 namespace Exeu\ObjectMerger\EventDispatcher;
+
 use Exeu\ObjectMerger\Event\Event;
 
 /**
- * Class EventDispatcher
+ * Interface of a light weight eventdispatcher which is used for this library.
  *
  * @author Jan Eichhorn <exeu65@googlemail.com>
  */
-class EventDispatcher implements EventDispatcherInterface
+interface EventDispatcherInterface
 {
     /**
-     * @var array
+     * Adds a listener.
+     *
+     * @param string   $eventName
+     * @param callable $listener
      */
-    protected $listeners = array();
+    public function addListener($eventName, $listener);
 
     /**
-     * {@inheritDoc}
+     * Dispatches an event if there are any listeners.
+     *
+     * @param string $eventName
+     * @param mixed  $event
      */
-    public function addListener($eventName, $listener)
-    {
-        $this->listeners[$eventName][] = $listener;
-    }
+    public function dispatch($eventName, Event $event);
 
     /**
-     * {@inheritDoc}
+     * Checks if there are listeners registered for this event.
+     *
+     * @param string $eventName
+     *
+     * @return bool
      */
-    public function dispatch($eventName, Event $event)
-    {
-        if (!$this->hasListener($eventName)) {
-            return;
-        }
-
-        foreach ($this->listeners[$eventName] as $listener) {
-            $event->setEventDispatcher($this);
-            call_user_func($listener, $event);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function hasListener($eventName)
-    {
-        return isset($this->listeners[$eventName]);
-    }
+    public function hasListener($eventName);
 }

@@ -18,7 +18,6 @@
 namespace Exeu\ObjectMerger\Event;
 
 use Exeu\ObjectMerger\MergeContext;
-use Symfony\Component\EventDispatcher\Event;
 
 /**
  * A simple MergeEvent.

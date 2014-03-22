@@ -18,11 +18,13 @@
 namespace Exeu\ObjectMerger\Test;
 
 use Exeu\ObjectMerger\Annotation\Mergeable;
+use Exeu\ObjectMerger\Annotation\ObjectIdentifier;
 
 /**
  * Class Test
  *
  * @Mergeable(accessor="public_method")
+ * @ObjectIdentifier(fields={"fullname"})
  */
 class SubObject
 {

@@ -19,7 +19,8 @@ namespace Exeu\ObjectMerger;
 
 use Exeu\ObjectMerger\Accessor\PropertyAccessorRegistry;
 use Exeu\ObjectMerger\Event\MergeEvent;
-use Exeu\ObjectMerger\EventDispatcher\EventDispatcher;
+use Exeu\ObjectMerger\EventDispatcher\EventDispatcherInterface;
+use Exeu\ObjectMerger\Metadata\ClassMetadata;
 use Metadata\MetadataFactory;
 use Exeu\ObjectMerger\Metadata\PropertyMetadata;
 
@@ -47,7 +48,7 @@ class GraphWalker
     protected $visitor;
 
     /**
-     * @var EventDispatcher
+     * @var EventDispatcherInterface
      */
     protected $eventDispatcher;
 
@@ -67,13 +68,13 @@ class GraphWalker
      * @param MetadataFactory                   $metadataFactory
      * @param PropertyAccessorRegistryInterface $propertyAccessorRegistry
      * @param MergeHandlerRegistryInterface     $mergeHandlerRegistry
-     * @param EventDispatcher                   $dispatcher
+     * @param EventDispatcherInterface          $dispatcher
      */
     public function __construct(
         MetadataFactory $metadataFactory,
         PropertyAccessorRegistryInterface $propertyAccessorRegistry,
         MergeHandlerRegistryInterface $mergeHandlerRegistry,
-        EventDispatcher $dispatcher
+        EventDispatcherInterface $dispatcher
     )
     {
         $this->metadataFactory          = $metadataFactory;
@@ -109,6 +110,17 @@ class GraphWalker
 
         $classMetadata = $this->metadataFactory->getMetadataForClass(get_class($mergeFrom));
 
+        $this->walkProperties($mergeFrom, $mergeTo, $classMetadata);
+    }
+    /**
+     * Walks over the objectproperties which are marked as mergeable.
+     *
+     * @param object        $mergeFrom
+     * @param object        $mergeTo
+     * @param ClassMetadata $classMetadata
+     */
+    protected function walkProperties($mergeFrom, $mergeTo, $classMetadata)
+    {
         // Preventing the object to be visited again.
         $this->visitedObjects[spl_object_hash($mergeFrom)] = true;
 
@@ -127,7 +139,6 @@ class GraphWalker
                 case 'string':
                 case 'object':
                 case 'boolean':
-                case 'Collection':
                     // calls a type specified merge method on the visitor.
                     $this->visitor->{'merge' . ucfirst($comparableProperty->type)}(
                         $comparableProperty,
@@ -138,7 +149,8 @@ class GraphWalker
                     // If the type is not one of the default types, try to merge this property by a handler.
                     try {
                         $this->visitor->mergeByHandler($comparableProperty, $executionContext);
-                    } catch (\Exception $e) { }
+                    } catch (\Exception $e) {
+                    }
                     break;
             }
         }
