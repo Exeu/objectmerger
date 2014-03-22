@@ -49,4 +49,4 @@ class AddMissing implements MergeStrategyInterface
             $mergeableObjectCollection
         );
     }
-} 
+}

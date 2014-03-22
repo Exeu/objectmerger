@@ -33,4 +33,4 @@ class Events
      * The post merge event type.
      */
     const POST_MERGE = 'exeu.object_merger.events.post_merge';
-} 
+}

@@ -99,4 +99,4 @@ class MergeEvent extends Event
     {
         return $this->type;
     }
-} 
+}

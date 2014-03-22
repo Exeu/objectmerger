@@ -17,7 +17,6 @@
 
 namespace Exeu\ObjectMerger;
 
-use Exeu\ObjectMerger\Annotation\Mergeable;
 use Exeu\ObjectMerger\Metadata\PropertyMetadata;
 
 /**

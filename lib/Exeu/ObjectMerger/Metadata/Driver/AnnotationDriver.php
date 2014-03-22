@@ -18,7 +18,6 @@
 namespace Exeu\ObjectMerger\Metadata\Driver;
 
 use Doctrine\Common\Annotations\Reader;
-use Exeu\ObjectMerger\Annotation\ClassDetermineStrategy;
 use Exeu\ObjectMerger\Annotation\Mergeable;
 use Exeu\ObjectMerger\Annotation\ObjectIdentifier;
 use Exeu\ObjectMerger\Metadata\ClassMetadata;
