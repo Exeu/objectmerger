@@ -57,46 +57,55 @@ class CollectionHandler implements MergeHandlerInterface
             throw new \Exception('You must provide an inner type.');
         }
 
+        $reflectionClass    = new \ReflectionClass($innerType);
         $innerClassMetadata = $context->getGraphWalker()->getMetadataFactory()->getMetadataForClass($innerType);
         $objectIdentifier   = $innerClassMetadata->objectIdentifier;
 
-        if (empty($objectIdentifier)) {
+        if ($objectIdentifier === null) {
             throw new \Exception('You must provide at least one identifier field.');
         }
 
-        $dominatingObjectCollection = $reflectionProperty->getValue($context->getMergeFrom());
-        $mergeableObjectCollection  = $reflectionProperty->getValue($context->getMergeTo());
+        $sourceCollection = $reflectionProperty->getValue($context->getMergeFrom());
+        $targetCollection = $reflectionProperty->getValue($context->getMergeTo());
 
         $collectedValues = array('missing' => array(), 'removed' => array());
-        foreach ($dominatingObjectCollection as $singleDominatingObject) {
-            $reflectionClass = new \ReflectionClass($singleDominatingObject);
-
-            foreach ($mergeableObjectCollection as $mergeableObject) {
-
-                $identifierMap = array_fill_keys(array_values($objectIdentifier), false);
-
-                foreach ($objectIdentifier as $key) {
-                    $comparsionIdentifier = $reflectionClass->getProperty($key);
-                    $comparsionIdentifier->setAccessible(true);
-
-                    $comparsionIdentifierValue = $comparsionIdentifier->getValue($singleDominatingObject);
-                    $mergeableObjectComparsionIdentifierValue = $comparsionIdentifier->getValue($mergeableObject);
-
-                    if ($comparsionIdentifierValue == $mergeableObjectComparsionIdentifierValue) {
-                        $identifierMap[$key] = true;
-                    }
-                }
-
-                if (!in_array(false, array_values($identifierMap))) {
-                    $context->getGraphWalker()->accept($singleDominatingObject, $mergeableObject);
+        foreach ($sourceCollection as $sourceItem) {
+            foreach ($targetCollection as $targetItem) {
+                if ($this->isMergeable($objectIdentifier, $reflectionClass, $sourceItem, $targetItem)) {
+                    $context->getGraphWalker()->accept($sourceItem, $targetItem);
                     continue 2;
                 }
             }
 
-            array_push($collectedValues['missing'], $singleDominatingObject);
+            array_push($collectedValues['missing'], $sourceItem);
         }
 
         $this->applyCollectionMergeStrategy($propertyMetadata, $collectedValues, $context);
+    }
+
+    /**
+     * @param array            $objectIdentifier
+     * @param \ReflectionClass $reflectionClass
+     * @param object           $sourceItem
+     * @param object           $targetItem
+     *
+     * @return bool
+     */
+    protected function isMergeable(array $objectIdentifier, \ReflectionClass $reflectionClass, $sourceItem, $targetItem)
+    {
+        foreach ($objectIdentifier as $key) {
+            $comparsionIdentifier = $reflectionClass->getProperty($key);
+            $comparsionIdentifier->setAccessible(true);
+
+            $sourceValue    = $comparsionIdentifier->getValue($sourceItem);
+            $mergeableValue = $comparsionIdentifier->getValue($targetItem);
+
+            if ($sourceValue != $mergeableValue) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

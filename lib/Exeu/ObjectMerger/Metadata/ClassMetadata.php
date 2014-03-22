@@ -32,9 +32,9 @@ class ClassMetadata extends BaseClassMetadata
     public $accessor = 'reflection';
 
     /**
-     * @var string
+     * @var array
      */
-    public $objectIdentifier = array();
+    public $objectIdentifier = null;
 
     /**
      * Serializes the current ClassMetadata.

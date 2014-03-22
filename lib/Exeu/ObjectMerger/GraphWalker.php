@@ -112,25 +112,28 @@ class GraphWalker
 
         $this->walkProperties($mergeFrom, $mergeTo, $classMetadata);
     }
+
     /**
      * Walks over the objectproperties which are marked as mergeable.
      *
      * @param object        $mergeFrom
      * @param object        $mergeTo
      * @param ClassMetadata $classMetadata
+     *
+     * @throws \Exception
      */
     protected function walkProperties($mergeFrom, $mergeTo, $classMetadata)
     {
         // Preventing the object to be visited again.
         $this->visitedObjects[spl_object_hash($mergeFrom)] = true;
 
-        // Preparing a new ExecutionContext.
-        $executionContext = new MergeContext($classMetadata, $this, $mergeFrom, $mergeTo);
+        // Preparing a new MergeContext.
+        $mergeContext = new MergeContext($classMetadata, $this, $mergeFrom, $mergeTo);
 
         // Dispatching the premerge event.
         $this->eventDispatcher->dispatch(
             Events::PRE_MERGE,
-            new MergeEvent(MergeEvent::TYPE_PRE, $executionContext)
+            new MergeEvent(MergeEvent::TYPE_PRE, $mergeContext)
         );
 
         foreach ($classMetadata->propertyMetadata as $comparableProperty) {
@@ -142,14 +145,15 @@ class GraphWalker
                     // calls a type specified merge method on the visitor.
                     $this->visitor->{'merge' . ucfirst($comparableProperty->type)}(
                         $comparableProperty,
-                        $executionContext
+                        $mergeContext
                     );
                     break;
                 default:
                     // If the type is not one of the default types, try to merge this property by a handler.
                     try {
-                        $this->visitor->mergeByHandler($comparableProperty, $executionContext);
+                        $this->visitor->mergeByHandler($comparableProperty, $mergeContext);
                     } catch (\Exception $e) {
+                        throw $e;
                     }
                     break;
             }
@@ -158,7 +162,7 @@ class GraphWalker
         // Dispatching the postmerge event.
         $this->eventDispatcher->dispatch(
             Events::POST_MERGE,
-            new MergeEvent(MergeEvent::TYPE_POST, $executionContext)
+            new MergeEvent(MergeEvent::TYPE_POST, $mergeContext)
         );
     }
 
