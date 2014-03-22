@@ -19,10 +19,9 @@ namespace Exeu\ObjectMerger;
 
 use Exeu\ObjectMerger\Accessor\PropertyAccessorRegistry;
 use Exeu\ObjectMerger\Event\MergeEvent;
+use Exeu\ObjectMerger\EventDispatcher\EventDispatcher;
 use Metadata\MetadataFactory;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Exeu\ObjectMerger\Metadata\PropertyMetadata;
-use Symfony\Component\EventDispatcher\GenericEvent;
 
 /**
  * The GraphWalker walks through every property of the object
@@ -48,7 +47,7 @@ class GraphWalker
     protected $visitor;
 
     /**
-     * @var EventDispatcherInterface
+     * @var EventDispatcher
      */
     protected $eventDispatcher;
 
@@ -66,19 +65,19 @@ class GraphWalker
      * Constructor.
      *
      * @param MetadataFactory                   $metadataFactory
-     * @param EventDispatcherInterface          $eventDispatcher
      * @param PropertyAccessorRegistryInterface $propertyAccessorRegistry
      * @param MergeHandlerRegistryInterface     $mergeHandlerRegistry
+     * @param EventDispatcher                   $dispatcher
      */
     public function __construct(
         MetadataFactory $metadataFactory,
-        EventDispatcherInterface $eventDispatcher,
         PropertyAccessorRegistryInterface $propertyAccessorRegistry,
-        MergeHandlerRegistryInterface $mergeHandlerRegistry
+        MergeHandlerRegistryInterface $mergeHandlerRegistry,
+        EventDispatcher $dispatcher
     )
     {
         $this->metadataFactory          = $metadataFactory;
-        $this->eventDispatcher          = $eventDispatcher;
+        $this->eventDispatcher          = $dispatcher;
         $this->propertyAccessorRegistry = $propertyAccessorRegistry;
         $this->mergeHandlerRegistry     = $mergeHandlerRegistry;
         $this->visitor                  = new MergingVisitor();

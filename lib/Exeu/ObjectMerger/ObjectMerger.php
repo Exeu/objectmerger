@@ -17,11 +17,10 @@
 
 namespace Exeu\ObjectMerger;
 
-use Exeu\ObjectMerger\PropertyAccessorRegistryInterface;
+use Exeu\ObjectMerger\EventDispatcher\EventDispatcher;
 use Exeu\ObjectMerger\Accessor\PublicMethodAccessor;
 use Exeu\ObjectMerger\Accessor\ReflectionAccessor;
 use Metadata\MetadataFactory;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * The ObjectMerger merges to objects of any complexity.
@@ -46,24 +45,24 @@ class ObjectMerger
      * Constructor.
      *
      * @param MetadataFactory                   $metadataFactory
-     * @param EventDispatcherInterface          $eventDispatcher
      * @param PropertyAccessorRegistryInterface $propertyAccessorRegistry
      * @param MergeHandlerRegistryInterface     $mergeHandlerRegistry
+     * @param EventDispatcher                   $dispatcher
      */
     public function __construct(
         MetadataFactory $metadataFactory,
-        EventDispatcherInterface $eventDispatcher,
         PropertyAccessorRegistryInterface $propertyAccessorRegistry,
-        MergeHandlerRegistryInterface $mergeHandlerRegistry
+        MergeHandlerRegistryInterface $mergeHandlerRegistry,
+        EventDispatcher $dispatcher
     )
     {
         $this->addDefaultPropertyAccessors($propertyAccessorRegistry);
 
         $this->graphWalker = new GraphWalker(
             $metadataFactory,
-            $eventDispatcher,
             $propertyAccessorRegistry,
-            $mergeHandlerRegistry
+            $mergeHandlerRegistry,
+            $dispatcher
         );
     }
 
