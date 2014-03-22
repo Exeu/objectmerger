@@ -31,6 +31,37 @@ Typically its located in the vendor dir and its called autoload.php
 
 ##Basic Usage:
 
+###Adding mergeable metadata
+Before you can merge objects you have to add some metadata about which property should be mergeable.
+You can achieve this out of the box by three different ways: Annotations, YAML and XML.
+
+####Annotation
+```php
+<?php
+namespace Acme;
+
+use Exeu\ObjectMerger\Annotation as Exeu;
+
+class Foo
+{
+    /**
+     * @Exeu\Mergeable(type="string")
+     */
+    private $bar;
+    
+    public function setBar($bar) { $this->bar = $bar; }
+    public function getBar() { return $this->bar; }
+}
+
+```
+####YAML
+Not implemented yet. If you want to contribute -> Feel free and fork this library.
+
+####XML
+Not implemented yet. If you want to contribute -> Feel free and fork this library.
+
+###Using the merger
+
 ```php
 <?php
 
@@ -56,10 +87,10 @@ $objectMerger = new ObjectMerger($metadataFactory, $propertyAccessorRegistry, $m
 
 // ...
 
-$objectA = new Foo();
+$objectA = new \Acme\Foo();
 $objectA->setBar('baz');
 
-$objectB = new Foo();
+$objectB = new \Acme\Foo();
 $objectB->setBar('overwritten-baz');
 
 $objectMerger->merge($objectA, $objectB);
