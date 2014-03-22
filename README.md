@@ -2,6 +2,8 @@
 
 With this library you have the abillity to merge two objects of the same type.
 
+This library is under construction. Things will change.
+
 ## Build status
 
 [![Build Status](http://ci.pixel-web.org/job/objectmerger/badge/icon)](http://ci.pixel-web.org/job/objectmerger/)
