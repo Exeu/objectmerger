@@ -48,6 +48,11 @@ class PropertyMetadata extends BasePropertyMetadata
     public $emptyValueStrategy = 'ignore';
 
     /**
+     * @var boolean
+     */
+    public $ignoreNullValue = false;
+
+    /**
      * Sets the type and pareses some information about collections.
      *
      * @param $type
@@ -81,6 +86,7 @@ class PropertyMetadata extends BasePropertyMetadata
             $this->innerType,
             $this->collectionMergeStrategy,
             $this->emptyValueStrategy,
+            $this->ignoreNullValue,
             parent::serialize()
         ));
     }
@@ -97,6 +103,7 @@ class PropertyMetadata extends BasePropertyMetadata
             $this->innerType,
             $this->collectionMergeStrategy,
             $this->emptyValueStrategy,
+            $this->ignoreNullValue,
             $parentStr
             ) = unserialize($str);
 

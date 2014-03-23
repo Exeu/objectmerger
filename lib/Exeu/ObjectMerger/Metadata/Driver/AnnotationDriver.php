@@ -19,6 +19,7 @@ namespace Exeu\ObjectMerger\Metadata\Driver;
 
 use Doctrine\Common\Annotations\Reader;
 use Exeu\ObjectMerger\Annotation\CollectionMergeStrategy;
+use Exeu\ObjectMerger\Annotation\IgnoreNullValue;
 use Exeu\ObjectMerger\Annotation\Mergeable;
 use Exeu\ObjectMerger\Annotation\ObjectIdentifier;
 use Exeu\ObjectMerger\Metadata\ClassMetadata;
@@ -74,12 +75,14 @@ class AnnotationDriver implements DriverInterface
         }
 
         foreach ($propertiesMetadata as $key => $propertyMetadata) {
+            /** @var PropertyMetadata $propertyMetadata */
             foreach ($propertiesAnnotations[$key] as $propertyAnnotation) {
                 if ($propertyAnnotation instanceof Mergeable) {
                     $propertyMetadata->setType($propertyAnnotation->type);
-                    $propertyMetadata->emptyValueStrategy = $propertyAnnotation->emptyValueStrategy;
                 } elseif ($propertyAnnotation instanceof CollectionMergeStrategy) {
                     $propertyMetadata->collectionMergeStrategy = $propertyAnnotation->strategies;
+                } elseif ($propertyAnnotation instanceof IgnoreNullValue) {
+                    $propertyMetadata->ignoreNullValue = $propertyAnnotation->activated;
                 }
 
                 $metadata->addPropertyMetadata($propertyMetadata);

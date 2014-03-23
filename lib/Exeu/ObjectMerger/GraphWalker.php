@@ -141,6 +141,16 @@ class GraphWalker
 
         foreach ($classMetadata->propertyMetadata as $comparableProperty) {
             /** @var PropertyMetadata $comparableProperty */
+            if ($comparableProperty->ignoreNullValue) {
+                $currentValue = $mergeContext->getPropertyAccessor()->getValue(
+                    $comparableProperty->reflection, $mergeContext->getMergeFrom()
+                );
+
+                if (null === $currentValue) {
+                    continue;
+                }
+            }
+
             switch ($comparableProperty->type) {
                 case 'string':
                 case 'object':
