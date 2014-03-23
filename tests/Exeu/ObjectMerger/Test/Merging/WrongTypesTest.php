@@ -19,6 +19,7 @@ namespace Exeu\ObjectMerger\Test;
 
 use Exeu\ObjectMerger\Test\Fixtures\ObjectA;
 use Exeu\ObjectMerger\Test\Fixtures\ObjectB;
+use Exeu\ObjectMerger\Test\Fixtures\ObjectC;
 
 class WrongTypesTest extends BaseMergeTest
 {
@@ -31,6 +32,18 @@ class WrongTypesTest extends BaseMergeTest
         $objectB = new ObjectB();
 
         $this->objectMerger->merge($objectA, $objectB);
+    }
+
+    /**
+     * @expectedException Exeu\ObjectMerger\Exception\MergeException
+     * @expectedExceptionMessage No handler found for the type "NonExistentType"
+     */
+    public function testMissingTypeHandler()
+    {
+        $objA = new ObjectC();
+        $objB = new ObjectC();
+
+        $this->objectMerger->merge($objA, $objB);
     }
 }
  
