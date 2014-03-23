@@ -15,12 +15,13 @@
  * limitations under the License.
  */
 
-namespace Exeu\ObjectMerger;
+namespace Exeu\ObjectMerger\MergeHandler\CollectionMergeStrategy;
 
+use Exeu\ObjectMerger\MergeContext;
 use Exeu\ObjectMerger\Metadata\PropertyMetadata;
 
 /**
- * This interface describes a single MergeStrategy.
+ * This interface describes a single CollectionMergeStrategy.
  * Mergestrategies are applied when a collection of objects is going to be merged.
  *
  * @author Jan Eichhorn <exeu65@googlemail.com>

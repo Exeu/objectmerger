@@ -24,7 +24,7 @@ use Exeu\ObjectMerger\Annotation\ObjectIdentifier;
  * Class Test
  *
  * @Mergeable(accessor="public_method")
- * @ObjectIdentifier(fields={"fullname"})
+ * @ObjectIdentifier({"fullname"})
  */
 class SubObject
 {

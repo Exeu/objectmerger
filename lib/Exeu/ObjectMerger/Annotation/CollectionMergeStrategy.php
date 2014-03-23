@@ -18,47 +18,22 @@
 namespace Exeu\ObjectMerger\Annotation;
 
 /**
- * Mergeable annotaion.
+ * CollectionMergeStrategy annotaion.
  *
  * @author Jan Eichhorn <exeu65@googlemail.com>
  *
  * @Annotation
- * @Target({"PROPERTY", "CLASS"})
+ * @Target({"PROPERTY"})
  */
-class Mergeable
+class CollectionMergeStrategy
 {
     /**
-     * Constant for the propertyaccessor "reflection".
+     * Constant for the "addMissing" mergestrategy.
      */
-    const ACCESSOR_REFLECTION = 'reflection';
+    const MERGE_STRATEGY_ADD_MISSING = 'addMissing';
 
     /**
-     * Constant for the propertyaccessor "public_method".
+     * @var array
      */
-    const ACCESSOR_PUBLIC_METHOD = 'public_method';
-
-    /**
-     * Constant for the emtpyvaluestrategy "ignore"
-     */
-    const EMPTY_VALUE_STRATEGY_IGNORE = 'ignore';
-
-    /**
-     * @var string
-     */
-    public $type;
-
-    /**
-     * @var string
-     */
-    public $collectionMergeStrategy = null;
-
-    /**
-     * @var string
-     */
-    public $accessor = Mergeable::ACCESSOR_REFLECTION;
-
-    /**
-     * @var string
-     */
-    public $emptyValueStrategy = Mergeable::EMPTY_VALUE_STRATEGY_IGNORE;
+    public $strategies;
 }
