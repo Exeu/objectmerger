@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-namespace Exeu\ObjectMerger\Test;
+namespace Exeu\ObjectMerger\Test\Fixtures;
 
 use Exeu\ObjectMerger\Annotation\Mergeable;
 use Exeu\ObjectMerger\Annotation\ObjectIdentifier;
@@ -29,53 +29,39 @@ use Exeu\ObjectMerger\Annotation\ObjectIdentifier;
 class SubObject
 {
     /**
-     * @var
-     *
      * @Mergeable(type="string")
      */
     private $fullname;
 
     /**
-     * @var
-     *
      * @Mergeable(type="boolean")
      */
     private $ignored;
 
     /**
-     * @var
-     *
      * @Mergeable(type="object")
      */
     private $testA;
 
-    /**
-     * @param mixed $fullname
-     */
+    private $notMergeable;
+
+    private $noGetterAndSetter;
+
     public function setFullname($fullname)
     {
         $this->fullname = $fullname;
     }
 
-    /**
-     * @return mixed
-     */
     public function getFullname()
     {
         return $this->fullname;
     }
 
-    /**
-     * @param mixed $ignored
-     */
     public function setIgnored($ignored)
     {
         $this->ignored = $ignored;
     }
 
-    /**
-     * @return mixed
-     */
     public function getIgnored()
     {
         return $this->ignored;
@@ -84,5 +70,15 @@ class SubObject
     public function setTestA($testA)
     {
         $this->testA = $testA;
+    }
+
+    public function setNotMergeable($notMergeable)
+    {
+        $this->notMergeable = $notMergeable;
+    }
+
+    public function getNotMergeable()
+    {
+        return $this->notMergeable;
     }
 } 

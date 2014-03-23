@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-namespace Exeu\ObjectMerger\Test;
+namespace Exeu\ObjectMerger\Test\Fixtures;
 
 use Exeu\ObjectMerger\Annotation\Mergeable;
 
@@ -27,100 +27,82 @@ class ObjectA
     private $id;
 
     /**
-     * @var
-     *
      * @Mergeable(type="string")
      */
     private $name;
 
     /**
-     * @var
-     *
      * @Mergeable(type="string")
      */
     private $street;
 
     /**
-     * @var
-     *
+     * @Mergeable(type="boolean")
+     */
+    private $bool;
+
+    /**
      * @Mergeable(type="object")
      */
     private $obj;
 
     /**
-     * @var
-     *
-     * @Mergeable(type="Collection<Exeu\ObjectMerger\Test\ObjectB>", collectionMergeStrategy="addMissing")
+     * @Mergeable(type="Collection<Exeu\ObjectMerger\Test\Fixtures\ObjectB>", collectionMergeStrategy="addMissing")
      */
     private $friends;
 
-    /**
-     * @param mixed $friends
-     */
+    private $notMergeable;
+
+    public function setBool($bool)
+    {
+        $this->bool = $bool;
+    }
+
+    public function getBool()
+    {
+        return $this->bool;
+    }
+
     public function setFriends($friends)
     {
         $this->friends = $friends;
     }
 
-    /**
-     * @return mixed
-     */
     public function getFriends()
     {
         return $this->friends;
     }
 
-    /**
-     * @param mixed $id
-     */
     public function setId($id)
     {
         $this->id = $id;
     }
 
-    /**
-     * @return mixed
-     */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * @param mixed $name
-     */
     public function setName($name)
     {
         $this->name = $name;
     }
 
-    /**
-     * @return mixed
-     */
     public function getName()
     {
         return $this->name;
     }
 
-    /**
-     * @param mixed $street
-     */
     public function setStreet($street)
     {
         $this->street = $street;
     }
 
-    /**
-     * @return mixed
-     */
     public function getStreet()
     {
         return $this->street;
     }
 
-    /**
-     * @param mixed $obj
-     */
     public function setObj($obj)
     {
         $obj->setTestA($this);
@@ -128,9 +110,6 @@ class ObjectA
         $this->obj = $obj;
     }
 
-    /**
-     * @return mixed
-     */
     public function getObj()
     {
         return $this->obj;

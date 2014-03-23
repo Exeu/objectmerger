@@ -18,28 +18,56 @@
 namespace Exeu\ObjectMerger\Test;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Collections\ArrayCollection;
 use Exeu\ObjectMerger\Accessor\PropertyAccessorRegistry;
 use Exeu\ObjectMerger\EventDispatcher\EventDispatcher;
 use Exeu\ObjectMerger\MergeHandler\MergeHandlerRegistry;
 use Exeu\ObjectMerger\Metadata\Driver\AnnotationDriver;
 use Exeu\ObjectMerger\ObjectMerger;
 use Metadata\MetadataFactory;
+use Doctrine\Common\Collections\ArrayCollection;
+use Exeu\ObjectMerger\Test\Fixtures\ObjectA;
+use Exeu\ObjectMerger\Test\Fixtures\ObjectB;
+use Exeu\ObjectMerger\Test\Fixtures\SubObject;
 
-class ComparsionTest extends \PHPUnit_Framework_TestCase
+abstract class BaseMergeTest extends \PHPUnit_Framework_TestCase
 {
-    public function testX()
+    /**
+     * @var ObjectMerger
+     */
+    protected $objectMerger;
+
+    protected function setUp()
     {
         $reader  = new AnnotationReader();
         $driver  = new AnnotationDriver($reader);
-        $factory = new MetadataFactory($driver);
 
-        $eventDispatcher = new EventDispatcher();
+        $metadataFactory          = new MetadataFactory($driver);
+        $eventDispatcher          = new EventDispatcher();
         $propertyAccessorRegistry = new PropertyAccessorRegistry();
-        $mergeHanlderRegistry = new MergeHandlerRegistry();
+        $mergeHanlderRegistry     = new MergeHandlerRegistry();
 
-        $bla = new ObjectMerger($factory, $propertyAccessorRegistry, $mergeHanlderRegistry, $eventDispatcher);
+        $this->objectMerger = new ObjectMerger($metadataFactory, $propertyAccessorRegistry, $mergeHanlderRegistry, $eventDispatcher);
+    }
 
+    public function provideFlatObject()
+    {
+        $testA   = new SubObject();
+        $testA->setFullname('HansImWald');
+        $testA->setIgnored(false);
+        $testA->setNotMergeable('NOT');
+
+        $testAA   = new SubObject();
+        $testAA->setFullname('ReinerImWald');
+        $testAA->setIgnored(true);
+        $testAA->setNotMergeable('MERGEABLE');
+
+        return array(
+            array($testA, $testAA)
+        );
+    }
+
+    public function provideObjectGraph()
+    {
         $objectA = new ObjectA();
         $objectB = new ObjectB();
         $objectC = new ObjectB();
@@ -51,6 +79,7 @@ class ComparsionTest extends \PHPUnit_Framework_TestCase
         $objectA->setId(1);
         $objectA->setName('Jan');
         $objectA->setStreet('blubb');
+        $objectA->setBool(true);
 
         $objectB->setId(1111);
         $objectB->setFullname('Jhon');
@@ -67,19 +96,18 @@ class ComparsionTest extends \PHPUnit_Framework_TestCase
         $objectA->setFriends($coll);
         $objectA->setObj($testA);
 
-
-
         $objectAA = new ObjectA();
         $objectBB = new ObjectB();
         $objectCC = new ObjectB();
         $testAA   = new SubObject();
 
-        $testAA->setFullname('HansWurst');
+        $testAA->setFullname('ReinerImWald');
         $testAA->setIgnored(true);
 
         $objectAA->setId(1);
         $objectAA->setName('Jan22');
         $objectAA->setStreet('blabb');
+        $objectAA->setBool(false);
 
         $objectBB->setId(12);
         $objectBB->setFullname('Jhon2');
@@ -96,10 +124,14 @@ class ComparsionTest extends \PHPUnit_Framework_TestCase
         $objectAA->setFriends($coll2);
         $objectAA->setObj($testAA);
 
-        var_dump($objectAA->getFriends());
-
-        $bla->merge($objectA, $objectAA);
-
-        var_dump($objectAA->getFriends());
+        return array(
+            array($objectA, $objectAA)
+        );
     }
-} 
+
+    protected function tearDown()
+    {
+
+    }
+}
+ 

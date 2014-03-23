@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-namespace Exeu\ObjectMerger\Test;
+namespace Exeu\ObjectMerger\Test\Fixtures;
 
 use Exeu\ObjectMerger\Annotation\Mergeable;
 use Exeu\ObjectMerger\Annotation\ObjectIdentifier;
