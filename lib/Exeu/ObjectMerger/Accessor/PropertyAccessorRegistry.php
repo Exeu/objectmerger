@@ -50,7 +50,7 @@ class PropertyAccessorRegistry implements PropertyAccessorRegistryInterface
     public function getPropertyAccessor($name)
     {
         if (!array_key_exists($name, $this->propertyAccessors)) {
-            throw new \Exception(sprintf('No Propertyaccessor with the name "%s" found.', $name));
+            throw new \InvalidArgumentException(sprintf('No Propertyaccessor with the name "%s" found.', $name));
         }
 
         return $this->propertyAccessors[$name];

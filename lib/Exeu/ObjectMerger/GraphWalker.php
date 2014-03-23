@@ -20,6 +20,7 @@ namespace Exeu\ObjectMerger;
 use Exeu\ObjectMerger\Accessor\PropertyAccessorRegistry;
 use Exeu\ObjectMerger\Event\MergeEvent;
 use Exeu\ObjectMerger\EventDispatcher\EventDispatcherInterface;
+use Exeu\ObjectMerger\Exception\MergeException;
 use Exeu\ObjectMerger\Metadata\ClassMetadata;
 use Metadata\MetadataFactory;
 use Exeu\ObjectMerger\Metadata\PropertyMetadata;
@@ -90,6 +91,8 @@ class GraphWalker
      *
      * @param object $mergeFrom Sourceobject
      * @param object $mergeTo   Targetobject
+     *
+     * @throws Exception\MergeException
      */
     public function accept($mergeFrom, $mergeTo)
     {
@@ -100,7 +103,7 @@ class GraphWalker
 
         $class = get_class($mergeFrom);
         if (!$mergeTo instanceof $class) {
-            return;
+            throw new MergeException('Not able to merge objects with different types.');
         }
 
         // If the object is not visited.

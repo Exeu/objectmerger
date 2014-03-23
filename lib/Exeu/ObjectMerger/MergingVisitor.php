@@ -17,6 +17,7 @@
 
 namespace Exeu\ObjectMerger;
 
+use Exeu\ObjectMerger\Exception\MergeException;
 use Exeu\ObjectMerger\Metadata\PropertyMetadata;
 
 /**
@@ -34,15 +35,16 @@ class MergingVisitor
      * @param PropertyMetadata $property
      * @param MergeContext     $context
      *
-     * @throws \Exception
+     * @throws MergeException
      */
     public function mergeByHandler(PropertyMetadata $property, MergeContext $context)
     {
         $mergeHandler = $context->getGraphWalker()->getMergeHandlerRegistry()->getMergeHandler($property->type);
 
         if (!$mergeHandler) {
-            throw new \Exception(sprintf('No handler found for the type "%s"', $property->type));
+            throw new MergeException(sprintf('No handler found for the type "%s"', $property->type));
         }
+
         $mergeHandler->merge($property, $context);
     }
 
