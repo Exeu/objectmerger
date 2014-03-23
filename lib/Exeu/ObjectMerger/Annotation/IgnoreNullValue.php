@@ -18,37 +18,17 @@
 namespace Exeu\ObjectMerger\Annotation;
 
 /**
- * Mergeable annotaion.
+ * IgnoreNullValue annotaion.
  *
  * @author Jan Eichhorn <exeu65@googlemail.com>
  *
  * @Annotation
- * @Target({"PROPERTY", "CLASS"})
+ * @Target({"PROPERTY"})
  */
-final class Mergeable
+final class IgnoreNullValue
 {
     /**
-     * Constant for the propertyaccessor "reflection".
+     * @var boolean
      */
-    const ACCESSOR_REFLECTION = 'reflection';
-
-    /**
-     * Constant for the propertyaccessor "public_method".
-     */
-    const ACCESSOR_PUBLIC_METHOD = 'public_method';
-
-    /**
-     * @var string
-     */
-    public $type;
-
-    /**
-     * @var string
-     */
-    public $collectionMergeStrategy = null;
-
-    /**
-     * @var string
-     */
-    public $accessor = Mergeable::ACCESSOR_REFLECTION;
+    public $activated = true;
 }

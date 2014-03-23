@@ -17,6 +17,8 @@
 
 namespace Exeu\ObjectMerger\Test;
 
+use Exeu\ObjectMerger\Test\Fixtures\ObjectC;
+use Exeu\ObjectMerger\Test\Fixtures\ObjectD;
 use Exeu\ObjectMerger\Test\Fixtures\SubObject;
 
 class FirstLevelMergeTest extends BaseMergeTest
@@ -82,5 +84,18 @@ class FirstLevelMergeTest extends BaseMergeTest
         $this->objectMerger->merge($objectA, $objectAA);
 
         $this->assertNotEquals($objectA->getNotMergeable(), $objectAA->getNotMergeable());
+    }
+
+    public function testIgnoreNullValue()
+    {
+        $objectA = new ObjectD();
+        $objectB = new ObjectD();
+
+        $objectA->fullname = null;
+        $objectB->fullname = 'NoNullValue';
+
+        $this->objectMerger->merge($objectA, $objectB);
+
+        $this->assertEquals('NoNullValue', $objectB->fullname);
     }
 } 
