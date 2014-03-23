@@ -18,6 +18,7 @@
 namespace Exeu\ObjectMerger\MergeHandler;
 
 use Exeu\ObjectMerger\Annotation\Mergeable;
+use Exeu\ObjectMerger\Exception\MergeException;
 use Exeu\ObjectMerger\MergeContext;
 use Exeu\ObjectMerger\MergeHandlerInterface;
 use Exeu\ObjectMerger\MergeStrategy\AddMissing;
@@ -54,7 +55,7 @@ class CollectionHandler implements MergeHandlerInterface
         $reflectionProperty = $propertyMetadata->reflection;
 
         if (!$innerType) {
-            throw new \Exception('You must provide an inner type.');
+            throw new MergeException('You must provide an inner type.');
         }
 
         $reflectionClass    = new \ReflectionClass($innerType);
@@ -62,7 +63,7 @@ class CollectionHandler implements MergeHandlerInterface
         $objectIdentifier   = $innerClassMetadata->objectIdentifier;
 
         if ($objectIdentifier === null) {
-            throw new \Exception('You must provide at least one identifier field.');
+            throw new MergeException('You must provide at least one identifier field.');
         }
 
         $sourceCollection = $reflectionProperty->getValue($context->getMergeFrom());

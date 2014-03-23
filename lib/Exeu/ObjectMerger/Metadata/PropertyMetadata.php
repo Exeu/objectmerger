@@ -17,6 +17,7 @@
 
 namespace Exeu\ObjectMerger\Metadata;
 
+use Exeu\ObjectMerger\Exception\MetadataParseException;
 use Metadata\PropertyMetadata as BasePropertyMetadata;
 
 /**
@@ -50,14 +51,15 @@ class PropertyMetadata extends BasePropertyMetadata
      * Sets the type and pareses some information about collections.
      *
      * @param $type
-     * @throws \Exception
+     *
+     * @throws MetadataParseException
      */
     public function setType($type)
     {
         $matches = array();
 
         if (!preg_match('/^(.*?)(?:<([^>]*)>)?$/', $type, $matches)) {
-            throw new \Exception('Unable to parse type: ' . $type);
+            throw new MetadataParseException('Unable to parse type: ' . $type);
         }
 
         $this->type = $matches[1];
