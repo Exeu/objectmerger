@@ -21,7 +21,7 @@ use Exeu\ObjectMerger\Annotation\Mergeable;
 use Exeu\ObjectMerger\Annotation\ObjectIdentifier;
 
 /**
- * @ObjectIdentifier(fields={"id"})
+ * @ObjectIdentifier({"id"})
  */
 class ObjectB
 {

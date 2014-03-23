@@ -15,10 +15,9 @@
  * limitations under the License.
  */
 
-namespace Exeu\ObjectMerger\MergeStrategy;
+namespace Exeu\ObjectMerger\MergeHandler\CollectionMergeStrategy;
 
 use Exeu\ObjectMerger\MergeContext;
-use Exeu\ObjectMerger\MergeStrategyInterface;
 use Exeu\ObjectMerger\Metadata\PropertyMetadata;
 
 /**

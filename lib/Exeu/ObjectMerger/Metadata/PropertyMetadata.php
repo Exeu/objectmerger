@@ -38,9 +38,9 @@ class PropertyMetadata extends BasePropertyMetadata
     public $innerType;
 
     /**
-     * @var string
+     * @var array
      */
-    public $collectionMergeStrategy;
+    public $collectionMergeStrategy = array();
 
     /**
      * @var string

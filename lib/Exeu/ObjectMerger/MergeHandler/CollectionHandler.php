@@ -17,11 +17,11 @@
 
 namespace Exeu\ObjectMerger\MergeHandler;
 
-use Exeu\ObjectMerger\Annotation\Mergeable;
+use Exeu\ObjectMerger\Annotation\CollectionMergeStrategy;
 use Exeu\ObjectMerger\Exception\MergeException;
 use Exeu\ObjectMerger\MergeContext;
 use Exeu\ObjectMerger\MergeHandlerInterface;
-use Exeu\ObjectMerger\MergeStrategy\AddMissing;
+use Exeu\ObjectMerger\MergeHandler\CollectionMergeStrategy\AddMissing;
 use Exeu\ObjectMerger\Metadata\PropertyMetadata;
 
 /**
@@ -41,7 +41,7 @@ class CollectionHandler implements MergeHandlerInterface
      */
     public function __construct()
     {
-        $this->mergeStrategies[Mergeable::MERGE_STRATEGY_ADD_MISSING] = new AddMissing();
+        $this->mergeStrategies[CollectionMergeStrategy::MERGE_STRATEGY_ADD_MISSING] = new AddMissing();
     }
 
     /**
@@ -120,11 +120,17 @@ class CollectionHandler implements MergeHandlerInterface
     {
         $collectionMergeStrategy = $propertyMetadata->collectionMergeStrategy;
 
-        if (!isset($this->mergeStrategies[$collectionMergeStrategy])) {
+        if (empty($collectionMergeStrategy) || !is_array($collectionMergeStrategy)) {
             return;
         }
 
-        $this->mergeStrategies[$collectionMergeStrategy]->apply($propertyMetadata, $collectedValues, $context);
+        foreach ($collectionMergeStrategy as $mergeStrategy) {
+            if (!isset($this->mergeStrategies[$mergeStrategy])) {
+                continue;
+            }
+
+            $this->mergeStrategies[$mergeStrategy]->apply($propertyMetadata, $collectedValues, $context);
+        }
     }
 
     /**

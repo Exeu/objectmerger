@@ -18,6 +18,7 @@
 namespace Exeu\ObjectMerger\Test\Fixtures;
 
 use Exeu\ObjectMerger\Annotation\Mergeable;
+use Exeu\ObjectMerger\Annotation\CollectionMergeStrategy;
 
 /**
  * @Mergeable
@@ -47,7 +48,8 @@ class ObjectA
     private $obj;
 
     /**
-     * @Mergeable(type="Collection<Exeu\ObjectMerger\Test\Fixtures\ObjectB>", collectionMergeStrategy="addMissing")
+     * @Mergeable(type="Collection<Exeu\ObjectMerger\Test\Fixtures\ObjectB>")
+     * @CollectionMergeStrategy({"addMissing"})
      */
     private $friends;
 
