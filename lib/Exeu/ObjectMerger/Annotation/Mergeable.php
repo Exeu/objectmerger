@@ -25,7 +25,7 @@ namespace Exeu\ObjectMerger\Annotation;
  * @Annotation
  * @Target({"PROPERTY", "CLASS"})
  */
-class Mergeable
+final class Mergeable
 {
     /**
      * Constant for the propertyaccessor "reflection".

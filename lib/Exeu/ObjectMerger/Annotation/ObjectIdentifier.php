@@ -25,7 +25,7 @@ namespace Exeu\ObjectMerger\Annotation;
  * @Annotation
  * @Target({"CLASS"})
  */
-class ObjectIdentifier
+final class ObjectIdentifier
 {
     /**
      * @var array

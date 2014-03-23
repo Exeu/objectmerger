@@ -25,7 +25,7 @@ namespace Exeu\ObjectMerger\Annotation;
  * @Annotation
  * @Target({"PROPERTY"})
  */
-class CollectionMergeStrategy
+final class CollectionMergeStrategy
 {
     /**
      * Constant for the "addMissing" mergestrategy.
