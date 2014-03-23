@@ -25,5 +25,4 @@ namespace Exeu\ObjectMerger\Exception;
  */
 class MetadataParseException extends \RuntimeException
 {
-
-} 
+}
