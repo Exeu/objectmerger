@@ -25,4 +25,3 @@ namespace Exeu\ObjectMerger\Exception;
 class MergeException extends \InvalidArgumentException
 {
 }
-
