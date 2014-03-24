@@ -75,22 +75,21 @@ class AnnotationDriver implements DriverInterface
         }
 
         foreach ($propertiesMetadata as $key => $propertyMetadata) {
-            $canAdd = false;
+            $canAdd = true;
             /** @var PropertyMetadata $propertyMetadata */
             foreach ($propertiesAnnotations[$key] as $propertyAnnotation) {
                 if ($propertyAnnotation instanceof Mergeable) {
                     $propertyMetadata->setType($propertyAnnotation->type);
-                    $canAdd = true;
                 } elseif ($propertyAnnotation instanceof CollectionMergeStrategy) {
                     $propertyMetadata->collectionMergeStrategy = $propertyAnnotation->strategies;
-                    $canAdd = true;
                 } elseif ($propertyAnnotation instanceof IgnoreNullValue) {
                     $propertyMetadata->ignoreNullValue = $propertyAnnotation->activated;
-                    $canAdd = true;
+                } else {
+                    $canAdd = false;
                 }
             }
 
-
+            // Only add propertymetadata if it is defined within the mergeannotations.
             if ($canAdd) {
                 $metadata->addPropertyMetadata($propertyMetadata);
             }
