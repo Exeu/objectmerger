@@ -76,6 +76,11 @@ class AnnotationDriver implements DriverInterface
 
         foreach ($propertiesMetadata as $key => $propertyMetadata) {
             $canAdd = true;
+
+            if (empty($propertiesAnnotations[$key])) {
+                continue;
+            }
+
             /** @var PropertyMetadata $propertyMetadata */
             foreach ($propertiesAnnotations[$key] as $propertyAnnotation) {
                 if ($propertyAnnotation instanceof Mergeable) {
@@ -97,4 +102,6 @@ class AnnotationDriver implements DriverInterface
 
         return $metadata;
     }
+
+
 }

@@ -17,20 +17,13 @@
 
 namespace Exeu\ObjectMerger\Test\Fixtures;
 
-use Exeu\ObjectMerger\Annotation\Mergeable;
-use Exeu\ObjectMerger\Annotation\IgnoreNullValue;
 use Exeu\ObjectMerger\Annotation\ObjectIdentifier;
+use Exeu\ObjectMerger\Annotation\Mergeable;
 
-/**
- * @ObjectIdentifier({"fullname"})
- */
-class ObjectD
+class SubObjectD extends ObjectD
 {
-    private $id;
-
     /**
      * @Mergeable(type="string")
-     * @IgnoreNullValue
      */
-    public $fullname;
-}
+    private $property;
+} 

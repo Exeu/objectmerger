@@ -17,19 +17,22 @@
 
 namespace Exeu\ObjectMerger\Metadata;
 
-use Metadata\MergeableClassMetadata as BaseClassMetadata;
+use Exeu\ObjectMerger\Annotation\Mergeable;
+use Exeu\ObjectMerger\Exception\MetadataParseException;
+use Metadata\MergeableClassMetadata;
+use Metadata\MergeableInterface;
 
 /**
  * Metadata for a single class.
  *
  * @author Jan Eichhorn <exeu65@googlemail.com>
  */
-class ClassMetadata extends BaseClassMetadata
+class ClassMetadata extends MergeableClassMetadata
 {
     /**
      * @var string
      */
-    public $accessor = 'reflection';
+    public $accessor = Mergeable::ACCESSOR_REFLECTION;
 
     /**
      * @var array
@@ -64,5 +67,21 @@ class ClassMetadata extends BaseClassMetadata
             ) = unserialize($str);
 
         parent::unserialize($parentStr);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function merge(MergeableInterface $object)
+    {
+        if (!$object instanceof ClassMetadata) {
+            throw new MetadataParseException();
+        }
+
+        parent::merge($object);
+
+        if ($object->objectIdentifier !== null) {
+            $this->objectIdentifier = $object->objectIdentifier;
+        }
     }
 }
