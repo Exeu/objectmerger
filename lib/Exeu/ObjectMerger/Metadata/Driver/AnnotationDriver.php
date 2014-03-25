@@ -75,7 +75,7 @@ class AnnotationDriver implements DriverInterface
         }
 
         foreach ($propertiesMetadata as $key => $propertyMetadata) {
-            $canAdd = true;
+            $canAdd = null;
 
             if (empty($propertiesAnnotations[$key])) {
                 continue;
@@ -83,6 +83,7 @@ class AnnotationDriver implements DriverInterface
 
             /** @var PropertyMetadata $propertyMetadata */
             foreach ($propertiesAnnotations[$key] as $propertyAnnotation) {
+                $canAdd = true;
                 if ($propertyAnnotation instanceof Mergeable) {
                     $propertyMetadata->setType($propertyAnnotation->type);
                 } elseif ($propertyAnnotation instanceof CollectionMergeStrategy) {
