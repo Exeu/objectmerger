@@ -83,6 +83,23 @@ class MergingVisitor
     }
 
     /**
+     * Merges a property just by copying from left to right.
+     *
+     * @param PropertyMetadata $property Metadata of the property
+     * @param MergeContext     $context  The current mergingcontext
+     */
+    public function mergeMixed(PropertyMetadata $property, MergeContext $context)
+    {
+        $reflectionProperty = $property->reflection;
+
+        $context->getPropertyAccessor()->setValue(
+            $reflectionProperty,
+            $context->getMergeTo(),
+            $context->getPropertyAccessor()->getValue($reflectionProperty, $context->getMergeFrom())
+        );
+    }
+
+    /**
      * Merges an object property.
      *
      * @param PropertyMetadata $property Metadata of the property

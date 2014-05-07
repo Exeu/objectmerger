@@ -155,6 +155,7 @@ class GraphWalker
                 case 'string':
                 case 'object':
                 case 'boolean':
+                case 'mixed':
                     // calls a type specified merge method on the visitor.
                     $this->visitor->{'merge' . ucfirst($comparableProperty->type)}(
                         $comparableProperty,
