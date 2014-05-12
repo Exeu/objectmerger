@@ -101,7 +101,7 @@ class CollectionHandler implements MergeHandlerInterface
             $sourceValue    = $comparsionIdentifier->getValue($sourceItem);
             $mergeableValue = $comparsionIdentifier->getValue($targetItem);
 
-            if ($sourceValue != $mergeableValue) {
+            if ($sourceValue !== $mergeableValue) {
                 return false;
             }
         }
