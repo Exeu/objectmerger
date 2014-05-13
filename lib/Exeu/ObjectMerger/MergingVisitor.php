@@ -109,9 +109,17 @@ class MergingVisitor
     {
         $reflectionProperty = $property->reflection;
 
-        $context->getGraphWalker()->accept(
-            $reflectionProperty->getValue($context->getMergeFrom()),
-            $reflectionProperty->getValue($context->getMergeTo())
-        );
+        $leftValue  = $context->getPropertyAccessor()->getValue($reflectionProperty, $context->getMergeFrom());
+        $rightValue = $context->getPropertyAccessor()->getValue($reflectionProperty, $context->getMergeTo());
+
+        if (null === $rightValue) {
+            $context->getPropertyAccessor()->setValue(
+                $reflectionProperty, $context->getMergeTo(), $leftValue
+            );
+        } else {
+            $context->getGraphWalker()->accept(
+                $leftValue, $rightValue
+            );
+        }
     }
 }
