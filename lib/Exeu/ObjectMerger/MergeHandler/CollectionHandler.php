@@ -69,6 +69,14 @@ class CollectionHandler implements MergeHandlerInterface
         $sourceCollection = $reflectionProperty->getValue($context->getMergeFrom());
         $targetCollection = $reflectionProperty->getValue($context->getMergeTo());
 
+        if (!$sourceCollection instanceof \Traversable && !is_array($sourceCollection)) {
+            return;
+        }
+
+        if (!$targetCollection instanceof \Traversable && !is_array($targetCollection)) {
+            return;
+        }
+
         $collectedValues = array('missing' => array(), 'removed' => array());
         foreach ($sourceCollection as $sourceItem) {
             foreach ($targetCollection as $targetItem) {
