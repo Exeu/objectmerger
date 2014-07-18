@@ -219,4 +219,9 @@ class GraphWalker
     {
         return $this->mergeHandlerRegistry;
     }
+
+    public function flushStack()
+    {
+        $this->visitedObjects = [];
+    }
 }

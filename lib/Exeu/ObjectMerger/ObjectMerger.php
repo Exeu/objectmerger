@@ -96,4 +96,9 @@ class ObjectMerger
     {
         $this->graphWalker->accept($mergeFrom, $mergeTo);
     }
+
+    public function flushStack()
+    {
+        $this->graphWalker->flushStack();
+    }
 }
