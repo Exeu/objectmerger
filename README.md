@@ -99,3 +99,77 @@ $objectMerger->merge($objectA, $objectB);
 
 echo $objectB->getBar(); // will return 'baz'
 ```
+
+##Registering CustomHandler:
+
+A Customhandler is an own created merge handler. Creating a MergeHandler gives you the power of controlling HOW a property is beeing merged. Built in are some default mergehandler like (string, int, object, etc.).
+Now we are at the point to create a new merge handler.
+First of all you have to implement the MergeHandlerInterface.
+
+
+```php
+<?php
+
+namespace Acme\Demo\Handler;
+
+use Exeu\ObjectMerger\MergeHandlerInterface;
+use Exeu\ObjectMerger\Metadata\PropertyMetadata;
+use Exeu\ObjectMerger\MergeContext;
+
+class CustomHandler implements MergeHandlerInterface
+{
+    public function merge(PropertyMetadata $propertyMetadata, MergeContext $context)
+    {
+       // DO YOUR AWESOME STUFF HERE
+    }
+
+
+    public function getType()
+    {
+        return 'MyCustomHandler';
+    }
+}
+```
+
+After youve Written your handler you can simply register it in the MergeHandlerRegistry:
+
+```php
+<?php
+// bootrap as shown above.
+
+$customMergeHandler   = new \Acme\Demo\Handler\CustomHandler();
+$mergeHanlderRegistry = new MergeHandlerRegistry();
+$mergeHandlerRegistry->addMergeHandler($customMergeHandler);
+
+
+$objectMerger = new ObjectMerger($metadataFactory, $propertyAccessorRegistry, $mergeHanlderRegistry, $eventDispatcher);
+
+// bootstrap as shown above.
+
+```
+
+After attaching the MergeHandler to the Registry it is ready to use.
+Just add the MergeAnnotation to your property:
+
+```php
+<?php
+namespace Acme;
+
+use Exeu\ObjectMerger\Annotation as Exeu;
+
+class Foo
+{
+    /**
+     * @Exeu\Mergeable(type="MyCustomHandler")
+     */
+    private $bar;
+    
+    
+    // ...
+}
+
+```
+
+
+
+
